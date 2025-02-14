@@ -2,11 +2,16 @@
 #include "Player.hpp"
 #include "Enemy.hpp"
 #include "Grid.hpp"
+#include "EnemyBehaviour.hpp"
 #include <vector>
 
+using namespace std;
 
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600;
+
+vector<shared_ptr<EnemyBehaviour>> vectorEnemyBehaviour;
+shared_ptr<EnemyBehaviour> enemy_B1 = make_shared<EnemyBehaviour>("Fred", 100, 100);
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Jeu SFML - IA Ennemis");
@@ -35,10 +40,15 @@ int main() {
         }
 
         window.clear();
+
+
         grid.draw(window);
         window.draw(player.shape);
         for (const auto& enemy : enemies)
             window.draw(enemy.shape);
+
+
+
         window.display();
     }
     return 0;
