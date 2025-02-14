@@ -4,6 +4,8 @@
 #include "Grid.hpp"
 #include <vector>
 
+#include "EnemyFSM.hpp"
+
 
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600;
@@ -13,7 +15,12 @@ int main() {
     window.setFramerateLimit(60);
 
     Player player(200, 400);
-    std::vector<Enemy> enemies = { Enemy(100, 100), Enemy(700, 100) };
+    std::vector<shared_ptr<Enemy>> vectorEnemy;
+    shared_ptr<EnemyFSM> enemy1 = make_shared<EnemyFSM>(EnemyFSM(100, 100));
+    vectorEnemy.push_back(enemy1);
+    enemy1 = make_shared<EnemyFSM>(EnemyFSM(700, 100));
+    vectorEnemy.push_back(enemy1);
+
     Grid grid;
     grid.loadFromFile("map.txt");
 
@@ -29,16 +36,19 @@ int main() {
                 window.close();
         }
 
-        player.update(deltaTime, grid);
-        for (auto& enemy : enemies) {
-            enemy.update(deltaTime, grid);
+        player.update(deltaTime, grid, player.shape.getPosition());
+        for (auto& enemy : vectorEnemy) {
+            std::shared_ptr<EnemyFSM> fsm = std::dynamic_pointer_cast<EnemyFSM>(enemy);
+            if (fsm) {
+                fsm->update(deltaTime, grid, player.shape.getPosition());
+            }
         }
 
         window.clear();
         grid.draw(window);
         window.draw(player.shape);
-        for (const auto& enemy : enemies)
-            window.draw(enemy.shape);
+        for (const auto& enemy : vectorEnemy)
+            window.draw(enemy->shape);
         window.display();
     }
     return 0;
