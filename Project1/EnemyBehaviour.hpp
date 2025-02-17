@@ -5,10 +5,21 @@
 #include "SelectorNode.hpp"
 
 class EnemyBehaviour : public Enemy {
-public:
-    EnemyBehaviour(float x, float y);
+protected : 
+    Blackboard blackboard;
+    sf::CircleShape CircleDetect;
+    sf::CircleShape CircleRange;
 
-    void MovementManager();
+public:
+    EnemyBehaviour(std::string n, float x, float y, float circleDetect, float circleRange);
+
+    void PlayerDetected(Entity& player);
+
+    void PlayerInRange(Entity& player);
+
+    void PlayerLowLife();
 
     void update(float deltaTime, Grid& grid) override;
+
+    void draw(sf::RenderWindow& window);
 };

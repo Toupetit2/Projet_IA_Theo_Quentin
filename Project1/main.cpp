@@ -11,7 +11,8 @@ const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600;
 
 vector<shared_ptr<EnemyBehaviour>> vectorEnemyBehaviour;
-shared_ptr<EnemyBehaviour> enemy_B1 = make_shared<EnemyBehaviour>("Fred", 100, 100);
+vector<shared_ptr<Entity>> allEntity;
+
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Jeu SFML - IA Ennemis");
@@ -19,6 +20,9 @@ int main() {
 
     Player player(200, 400);
     std::vector<Enemy> enemies = { Enemy(100, 100), Enemy(700, 100) };
+    shared_ptr<EnemyBehaviour> enemy_B1 = make_shared<EnemyBehaviour>("Fred", 100, 500, 20.f, 50.f);
+    vectorEnemyBehaviour.push_back(enemy_B1);
+    
     Grid grid;
     grid.loadFromFile("map.txt");
 
@@ -47,7 +51,10 @@ int main() {
         for (const auto& enemy : enemies)
             window.draw(enemy.shape);
 
-
+        enemy_B1->PlayerDetected(player);
+        enemy_B1->PlayerInRange(player);
+        enemy_B1->update(deltaTime, grid);
+        enemy_B1->draw(window);
 
         window.display();
     }

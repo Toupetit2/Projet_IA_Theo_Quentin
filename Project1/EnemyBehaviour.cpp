@@ -1,15 +1,43 @@
 #include "EnemyBehaviour.hpp"
 
-EnemyBehaviour::EnemyBehaviour(float x, float y) : Enemy(x, y) {}
+EnemyBehaviour::EnemyBehaviour(std::string n, float x, float y, float circleDetect, float circleRange) : Enemy(x, y) {
+    shape.setPosition(x, y);
+    CircleDetect.setRadius(circleDetect);
+    CircleDetect.setPosition(x, y);
+    CircleDetect.setOrigin(35, 35);
+    CircleDetect.setFillColor(sf::Color(100, 255, 0, 50));
+    CircleRange.setRadius(circleRange);
+    CircleRange.setPosition(x, y);
+    CircleRange.setOrigin(35, 35);
+    CircleDetect.setFillColor(sf::Color(0, 255, 0, 50));
+    blackboard.SetValue("PlayerDetected", 0);
+    blackboard.SetValue("PlayerInRange", 0); // ajout de nouvelles valeurs qui vont servir pour les conditions
+    blackboard.SetValue("PlayerLowLife", 0);
+}
+
+void EnemyBehaviour::PlayerDetected(Entity& player)
+{
+    if (player.shape.getGlobalBounds().intersects(CircleDetect.getGlobalBounds())) {
+        shape.setFillColor(sf::Color::Green);
+        blackboard.SetValue("PlayerDetected", 1);
+    }
+}
+
+void EnemyBehaviour::PlayerInRange(Entity& player)
+{
+    if (player.shape.getGlobalBounds().intersects(CircleRange.getGlobalBounds())) {
+        shape.setFillColor(sf::Color::Blue);
+        blackboard.SetValue("PlayerInRange", 1);
+    }
+}
+
+void EnemyBehaviour::PlayerLowLife()
+{
+
+}
 
 void EnemyBehaviour::update(float deltaTime, Grid& grid)
 {
-    Blackboard blackboard;
-    blackboard.SetValue("PlayerDetected", 0); // ajout de nouvelles valeurs qui vont servir pour les conditions
-    blackboard.SetValue("PlayerInRange", 0);
-    blackboard.SetValue("PlayerLowLife", 0);
-
-
     auto root = std::make_unique<SelectorNode>(); // notre racine (big boss)
     auto selector = std::make_unique<SelectorNode>(); // selecteur qui va gérer nos sequences suivre et attaque pour les transmettre au big boss
     auto sequence = std::make_unique<SequenceNode>(); // sequence de fuite
@@ -34,4 +62,11 @@ void EnemyBehaviour::update(float deltaTime, Grid& grid)
     root->AddChild(std::make_unique<ActionNodePatrol>("Patrouiller")); // si rien ne se passe alors on patrouille
 
     root->execute(); // execute le tout
+}
+
+void EnemyBehaviour::draw(sf::RenderWindow& window)
+{
+    window.draw(CircleDetect);
+    window.draw(CircleRange);
+    window.draw(shape);
 }
