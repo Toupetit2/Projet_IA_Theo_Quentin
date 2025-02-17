@@ -2,13 +2,20 @@
 #include "Player.hpp"
 #include "Enemy.hpp"
 #include "Grid.hpp"
+#include "EnemyBehaviour.hpp"
 #include <vector>
 
 #include "EnemyFSM.hpp"
 
+using namespace std;
 
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600;
+
+vector<shared_ptr<EnemyBehaviour>> vectorEnemyBehaviour;
+vector<shared_ptr<Entity>> allEntity;
+sf::Vector2i start(100, 500);
+
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Jeu SFML - IA Ennemis");
@@ -21,8 +28,11 @@ int main() {
     enemy1 = make_shared<EnemyFSM>(EnemyFSM(700, 100));
     vectorEnemy.push_back(enemy1);
 
+    shared_ptr<EnemyBehaviour> enemy_B1 = make_shared<EnemyBehaviour>("Fred", 100, 300, 70.f, 35.f, start); //std::string n, float x, float y, float circleDetect, float circleRange, sf::Vector2i start
+    vectorEnemyBehaviour.push_back(enemy_B1);
+    
     Grid grid;
-    grid.loadFromFile("map.txt");
+    grid.loadFromFile("map2.txt");
 
     sf::Clock clock;
 
@@ -37,18 +47,27 @@ int main() {
         }
 
         player.update(deltaTime, grid, player);
+      
         for (auto& enemy : vectorEnemy) {
             std::shared_ptr<EnemyFSM> fsm = std::dynamic_pointer_cast<EnemyFSM>(enemy);
             if (fsm) {
                 fsm->update(deltaTime, grid, player);
             }
+
         }
 
         window.clear();
+
         grid.draw(window);
         window.draw(player.shape);
+
         for (const auto& enemy : vectorEnemy)
             window.draw(enemy->shape);
+
+        enemy_B1->PlayerInRange(player);
+        enemy_B1->update(deltaTime, grid, player);
+        enemy_B1->draw(window);
+
         window.display();
     }
     return 0;

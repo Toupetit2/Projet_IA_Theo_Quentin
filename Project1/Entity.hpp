@@ -15,7 +15,9 @@ public:
     Vector2f velocity;
 
     Entity(float x, float y, sf::Color color);
-    virtual void update(float deltaTime, Grid& grid, Entity& playerPos) = 0;
+
+    virtual void update(float deltaTime, Grid& grid, Entity& player) = 0;
+
 };
 
 #endif // ENTITY_HPP
