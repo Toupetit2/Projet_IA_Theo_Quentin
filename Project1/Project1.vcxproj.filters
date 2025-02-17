@@ -13,35 +13,89 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Fichiers sources\Fichier de William">
+      <UniqueIdentifier>{2973ccfd-ee9b-4fa4-b25b-c0f184d483ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Fichier de William">
+      <UniqueIdentifier>{fd33fc91-b49b-4b1f-958e-b23cae44b804}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Entity.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\Fichier de William</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\Fichier de William</Filter>
     </ClCompile>
     <ClCompile Include="Enemy.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\Fichier de William</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Fichiers sources\Fichier de William</Filter>
     </ClCompile>
     <ClCompile Include="Grid.cpp">
+      <Filter>Fichiers sources\Fichier de William</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBehaviour.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Blackboard.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="BTNode.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="ConditionNode.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SelectorNode.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SequenceNode.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Node.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Pathfinding.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Entity.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="Player.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Fichiers d%27en-tête\Fichier de William</Filter>
     </ClInclude>
     <ClInclude Include="Enemy.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Fichiers d%27en-tête\Fichier de William</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.hpp">
+      <Filter>Fichiers d%27en-tête\Fichier de William</Filter>
     </ClInclude>
     <ClInclude Include="Grid.hpp">
+      <Filter>Fichiers d%27en-tête\Fichier de William</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBehaviour.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Blackboard.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="BTNode.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="ConditionNode.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectorNode.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="SequenceNode.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Pathfinding.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
