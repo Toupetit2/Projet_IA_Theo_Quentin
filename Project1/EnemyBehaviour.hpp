@@ -14,25 +14,25 @@ protected :
     int pathIndex;
     sf::Clock moveClock;
     bool needsRepath;
-    sf::Vector2f position;
+    sf::Vector2f lastPlayerPosition;
 
 public:
 
-    sf::Vector2f lastPlayerPosition;
-    enum State { PATROL, CHASE, SEARCH };
+    enum State { PATROL, CHASE, SEARCH, ATTACK };
+
     State currentState;
 
     //void update(Grid& grid, sf::Vector2i target);
 
     EnemyBehaviour(std::string n, float x, float y, float circleDetect, float circleRange, sf::Vector2i start);
 
+    bool detectPlayer(Entity& player);
+
     void PlayerDetected(Entity& player);
 
     void PlayerInRange(Entity& player);
 
     void PlayerLowLife();
-
-    void Patrolling();
 
     void update(float deltaTime, Grid& grid, Entity& player) override;
 
