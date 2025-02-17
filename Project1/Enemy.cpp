@@ -2,9 +2,11 @@
 #include <cmath>
 
 Enemy::Enemy(float x, float y) : Entity(x, y, sf::Color::Red) {}
-void Enemy::update(float deltaTime, Grid& grid, Entity& playerPos) {}
+void Enemy::update(float deltaTime, Grid& grid, Entity& player) {}
+
 
 void Enemy::chase(Vector2f pPos, float deltaTime, Grid& grid)
+
 {
     Pathfinding pathfinding;
     vector<Vector2i> path = pathfinding.findPath(grid, Vector2i(shape.getPosition().x/40, shape.getPosition().y / 40), Vector2i(pPos.x/40, pPos.y/40));
@@ -17,8 +19,21 @@ void Enemy::chase(Vector2f pPos, float deltaTime, Grid& grid)
     }
 }
 
-void Enemy::patrol(float deltaTime)
-{
-    //shape.setPosition(pathfinding(shape.getPosition(), patrolTargetPositions[currentTargetID])[1]);
-}
+void Enemy::patrol(Vector2f ePos)
 
+{
+    static int currentWaypoint = 0;
+    static sf::Vector2f waypoints[4] = { sf::Vector2f(300, 150), sf::Vector2f(500, 500), sf::Vector2f(150, 300), sf::Vector2f(500, 300) };
+    sf::Vector2f target = waypoints[currentWaypoint];
+    sf::Vector2f direction = target - ePos;
+    float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+
+    if (distance < 5.0f) {
+        currentWaypoint = (currentWaypoint + 1) % 4;
+    }
+    else {
+        direction /= distance;
+        ePos += direction * 1.f;
+    }
+    shape.setPosition(ePos);
+}

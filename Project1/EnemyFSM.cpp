@@ -3,23 +3,24 @@
 
 EnemyFSM::EnemyFSM(float x, float y) : Enemy(x, y) {}
 
-void EnemyFSM::update(float deltaTime, Grid& grid, Entity& playerPos)
+void EnemyFSM::update(float deltaTime, Grid& grid, Entity& player)
 {
     switch (currentState) {
     case PATROL:
-        Enemy::patrol(deltaTime);
-        if (detectPlayer(playerPos.shape.getPosition()))
+        //Enemy::patrol(player.shape.getPosition());
+        if (detectPlayer(player.shape.getPosition()))
         { 
             currentState = CHASE;
         }
         break;
 
     case CHASE:
-        if (!detectPlayer(playerPos.shape.getPosition()))
+        if (!detectPlayer(player.shape.getPosition()))
         {
-            lastPlayerPos = playerPos.shape.getPosition();
+            lastPlayerPos = player.shape.getPosition();
             currentState = SEARCH;
         }
+
         Enemy::chase(playerPos.shape.getPosition(), deltaTime, grid);
         break;
 
@@ -96,7 +97,7 @@ bool EnemyFSM::collisionWithWall(Grid& grid)
 {
     sf::FloatRect enemyBounds = shape.getGlobalBounds();
 
-    // Calcul des indices de la grille où se trouve l'ennemi
+    // Calcul des indices de la grille oï¿½ se trouve l'ennemi
     int left = enemyBounds.left / 40;
     int right = (enemyBounds.left + enemyBounds.width) / 40;
     int top = enemyBounds.top / 40;
@@ -106,7 +107,7 @@ bool EnemyFSM::collisionWithWall(Grid& grid)
 
     if (!grid.getCell(top, left).walkable || !grid.getCell(top, right).walkable ||
         !grid.getCell(bottom, left).walkable || !grid.getCell(bottom, right).walkable) {
-        return true; // Collision détectée
+        return true; // Collision dï¿½tectï¿½e
     }
 
     return false; // Pas de collision

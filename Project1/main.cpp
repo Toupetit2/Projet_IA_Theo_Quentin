@@ -28,7 +28,7 @@ int main() {
     //enemy1 = make_shared<EnemyFSM>(EnemyFSM(700, 100));
     //vectorEnemy.push_back(enemy1);
 
-    shared_ptr<EnemyBehaviour> enemy_B1 = make_shared<EnemyBehaviour>("Fred", 100, 300, 70.f, 35.f, start); //std::string n, float x, float y, float circleDetect, float circleRange, sf::Vector2i start
+    shared_ptr<EnemyBehaviour> enemy_B1 = make_shared<EnemyBehaviour>("Fred", 100, 300, 200.f, 50.f, start); //std::string n, float x, float y, float circleDetect, float circleRange, sf::Vector2i start
     vectorEnemyBehaviour.push_back(enemy_B1);
     
     Grid grid;
