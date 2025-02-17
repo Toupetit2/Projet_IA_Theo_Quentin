@@ -1,0 +1,32 @@
+#include <iostream>
+#include <vector>
+#include "Enemy.hpp"
+
+using namespace std;
+using namespace sf;
+
+class EnemyFSM : public Enemy
+{
+private:
+	enum State { PATROL, CHASE, SEARCH };
+	State currentState = PATROL;
+	float detectionRange = 150;
+	float searchTime = 5.f;
+
+	Vector2f lastPlayerPos;
+	float timeSinceSearchStarted = 0.f;
+	Vector2f searchDirection;
+
+	vector<Vector2f> patrolTargetPositions = { Vector2f(10, 10), Vector2f(300, 50) };
+	int currentTargetID = 0;
+
+	//debug
+	State lastState = SEARCH;
+public:
+	EnemyFSM(float x, float y);
+	void update(float deltaTime, Grid& grid, Entity& playerPos) override;
+
+	bool detectPlayer(Vector2f pPos);
+
+	void search(Vector2f lastPlayerPosition, float deltaTime);
+};

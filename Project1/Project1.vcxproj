@@ -141,6 +141,8 @@
     <ClCompile Include="BTNode.cpp" />
     <ClCompile Include="ConditionNode.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyFSM.cpp" />
+    <ClCompile Include="EnemyFSM.hpp" />
     <ClCompile Include="EnemyBehaviour.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Grid.cpp" />
