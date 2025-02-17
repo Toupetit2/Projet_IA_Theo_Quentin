@@ -1,15 +1,15 @@
 #include "EnemyBehaviour.hpp"
 
-EnemyBehaviour::EnemyBehaviour(std::string n, float x, float y, float circleDetect, float circleRange) : Enemy(x, y) {
+EnemyBehaviour::EnemyBehaviour(std::string n, float x, float y, float circleDetect, float circleRange, sf::Vector2i start) : Enemy(x, y) {
     shape.setPosition(x, y);
     CircleDetect.setRadius(circleDetect);
     CircleDetect.setPosition(x, y);
-    CircleDetect.setOrigin(35, 35);
-    CircleDetect.setFillColor(sf::Color(100, 255, 0, 50));
+    CircleDetect.setOrigin(circleDetect / 1.5, circleDetect / 1.5);
+    CircleDetect.setFillColor(sf::Color(0, 255, 0, 50));
     CircleRange.setRadius(circleRange);
     CircleRange.setPosition(x, y);
-    CircleRange.setOrigin(35, 35);
-    CircleDetect.setFillColor(sf::Color(0, 255, 0, 50));
+    CircleRange.setOrigin(circleRange / 2, circleRange / 2);
+    CircleRange.setFillColor(sf::Color(0, 0, 255, 50));
     blackboard.SetValue("PlayerDetected", 0);
     blackboard.SetValue("PlayerInRange", 0); // ajout de nouvelles valeurs qui vont servir pour les conditions
     blackboard.SetValue("PlayerLowLife", 0);
@@ -21,13 +21,22 @@ void EnemyBehaviour::PlayerDetected(Entity& player)
         shape.setFillColor(sf::Color::Green);
         blackboard.SetValue("PlayerDetected", 1);
     }
+    else {
+        blackboard.SetValue("PlayerDetected", 0);
+        shape.setFillColor(sf::Color::Red);
+    }
 }
 
 void EnemyBehaviour::PlayerInRange(Entity& player)
 {
-    if (player.shape.getGlobalBounds().intersects(CircleRange.getGlobalBounds())) {
+    if (player.shape.getGlobalBounds().intersects(CircleRange.getGlobalBounds()) && player.shape.getGlobalBounds().intersects(CircleDetect.getGlobalBounds())) {
         shape.setFillColor(sf::Color::Blue);
         blackboard.SetValue("PlayerInRange", 1);
+        blackboard.SetValue("PlayerDetected", 0);
+    }
+    else {
+        blackboard.SetValue("PlayerInRange", 0);
+        shape.setFillColor(sf::Color::Red);
     }
 }
 

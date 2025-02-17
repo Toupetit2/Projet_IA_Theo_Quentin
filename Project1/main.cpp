@@ -12,19 +12,20 @@ const int WINDOW_HEIGHT = 600;
 
 vector<shared_ptr<EnemyBehaviour>> vectorEnemyBehaviour;
 vector<shared_ptr<Entity>> allEntity;
+sf::Vector2i start(100, 500);
 
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Jeu SFML - IA Ennemis");
     window.setFramerateLimit(60);
 
-    Player player(200, 400);
+    Player player(200, 200);
     std::vector<Enemy> enemies = { Enemy(100, 100), Enemy(700, 100) };
-    shared_ptr<EnemyBehaviour> enemy_B1 = make_shared<EnemyBehaviour>("Fred", 100, 500, 20.f, 50.f);
+    shared_ptr<EnemyBehaviour> enemy_B1 = make_shared<EnemyBehaviour>("Fred", 100, 300, 70.f, 35.f, start); //std::string n, float x, float y, float circleDetect, float circleRange, sf::Vector2i start
     vectorEnemyBehaviour.push_back(enemy_B1);
     
     Grid grid;
-    grid.loadFromFile("map.txt");
+    grid.loadFromFile("map2.txt");
 
     sf::Clock clock;
 
