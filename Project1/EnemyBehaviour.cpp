@@ -20,6 +20,9 @@ void EnemyBehaviour::PlayerDetected(Entity& player)
     if (player.shape.getGlobalBounds().intersects(CircleDetect.getGlobalBounds())) {
         shape.setFillColor(sf::Color::Green);
         blackboard.SetValue("PlayerDetected", 1);
+        currentState = CHASE;
+
+        //shape.move();
     }
     else {
         blackboard.SetValue("PlayerDetected", 0);
@@ -45,7 +48,27 @@ void EnemyBehaviour::PlayerLowLife()
 
 }
 
-void EnemyBehaviour::update(float deltaTime, Grid& grid)
+void EnemyBehaviour::Patrolling()
+{
+    if (blackboard.GetValue("Patrouiller")) {
+        static int currentWaypoint = 0;
+        static sf::Vector2f waypoints[4] = { sf::Vector2f(100, 300), sf::Vector2f(500, 100), sf::Vector2f(100, 300), sf::Vector2f(500, 300) };
+        sf::Vector2f target = waypoints[currentWaypoint];
+        sf::Vector2f direction = target - position;
+        float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+
+        if (distance < 5.0f) {
+            currentWaypoint = (currentWaypoint + 1) % 4;
+        }
+        else {
+            direction /= distance;
+            position += direction * 0.2f;
+        }
+        shape.setPosition(position);
+    }
+}
+
+void EnemyBehaviour::update(float deltaTime, Grid& grid, Entity& player)
 {
     auto root = std::make_unique<SelectorNode>(); // notre racine (big boss)
     auto selector = std::make_unique<SelectorNode>(); // selecteur qui va gérer nos sequences suivre et attaque pour les transmettre au big boss
@@ -71,6 +94,24 @@ void EnemyBehaviour::update(float deltaTime, Grid& grid)
     root->AddChild(std::make_unique<ActionNodePatrol>("Patrouiller")); // si rien ne se passe alors on patrouille
 
     root->execute(); // execute le tout
+
+    switch (currentState) {
+    case PATROL:
+        Patrolling();
+        break;
+        }
+    /*case CHASE:
+        chase(playerPos);
+        if (!detectPlayer(playerPos)) {
+            lastPlayerPosition = playerPos;
+            currentState = SEARCH;
+        }
+        break;
+
+    case SEARCH:
+        search(lastPlayerPosition, deltaTime);
+        break;
+    }*/
 }
 
 void EnemyBehaviour::draw(sf::RenderWindow& window)
@@ -79,3 +120,41 @@ void EnemyBehaviour::draw(sf::RenderWindow& window)
     window.draw(CircleRange);
     window.draw(shape);
 }
+
+/*void PNJ::chase(sf::Vector2f playerPos) {
+    sf::Vector2f direction = playerPos - position;
+    float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+
+    if (distance > 0) {
+        direction /= distance;
+        position += direction * 0.2f;
+    }
+
+    circle.setPosition(position);
+}
+
+void PNJ::search(sf::Vector2f lastPlayerPos, float deltaTime) {
+    static float searchTimer = 0.0f;
+    static sf::Vector2f searchDirection;
+
+    if (searchTimer == 0.0f) {
+        searchDirection = sf::Vector2f(rand() % 2 == 0 ? -1 : 1, rand() % 2 == 0 ? -1 : 1);
+        searchDirection /= std::sqrt(searchDirection.x * searchDirection.x + searchDirection.y * searchDirection.y);
+    }
+
+    searchTimer += deltaTime;
+    if (searchTimer < 10.0f) {
+        position += searchDirection * 5.f * deltaTime;
+    }
+    else {
+        searchTimer = 0.0f;
+        currentState = PATROL;
+    }
+
+    float distance = std::sqrt((lastPlayerPos.x - position.x) * (lastPlayerPos.x - position.x) + (lastPlayerPos.y - position.y) * (lastPlayerPos.y - position.y));
+    if (distance < detectionRadius) {
+        searchTimer = 0.0f;
+    }
+
+    circle.setPosition(position);
+}*/

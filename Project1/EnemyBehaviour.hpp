@@ -14,9 +14,13 @@ protected :
     int pathIndex;
     sf::Clock moveClock;
     bool needsRepath;
-    sf::Vector2i position;
+    sf::Vector2f position;
 
 public:
+
+    sf::Vector2f lastPlayerPosition;
+    enum State { PATROL, CHASE, SEARCH };
+    State currentState;
 
     //void update(Grid& grid, sf::Vector2i target);
 
@@ -28,7 +32,9 @@ public:
 
     void PlayerLowLife();
 
-    void update(float deltaTime, Grid& grid) override;
+    void Patrolling();
+
+    void update(float deltaTime, Grid& grid, Entity& player) override;
 
     void draw(sf::RenderWindow& window);
 };

@@ -39,9 +39,9 @@ int main() {
                 window.close();
         }
 
-        player.update(deltaTime, grid);
+        player.update(deltaTime, grid, player);
         for (auto& enemy : enemies) {
-            enemy.update(deltaTime, grid);
+            enemy.update(deltaTime, grid, player);
         }
 
         window.clear();
@@ -54,7 +54,8 @@ int main() {
 
         enemy_B1->PlayerDetected(player);
         enemy_B1->PlayerInRange(player);
-        enemy_B1->update(deltaTime, grid);
+        enemy_B1->Patrolling();
+        enemy_B1->update(deltaTime, grid, player);
         enemy_B1->draw(window);
 
         window.display();
