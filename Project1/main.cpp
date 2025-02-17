@@ -48,21 +48,21 @@ int main() {
 
         player.update(deltaTime, grid, player);
       
-        //for (auto& enemy : vectorEnemy) {
-        //    std::shared_ptr<EnemyFSM> fsm = std::dynamic_pointer_cast<EnemyFSM>(enemy);
-        //    if (fsm) {
-        //        fsm->update(deltaTime, grid, player);
-        //    }
+        for (auto& enemy : vectorEnemy) {
+            std::shared_ptr<EnemyFSM> fsm = std::dynamic_pointer_cast<EnemyFSM>(enemy);
+            if (fsm) {
+                fsm->update(deltaTime, grid, player);
+            }
 
-        //}
+        }
 
         window.clear();
 
         grid.draw(window);
         window.draw(player.shape);
 
-        //for (const auto& enemy : vectorEnemy)
-        //    window.draw(enemy->shape);
+        for (const auto& enemy : vectorEnemy)
+            window.draw(enemy->shape);
 
         enemy_B1->PlayerInRange(player);
         enemy_B1->update(deltaTime, grid, player);

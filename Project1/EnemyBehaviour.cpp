@@ -90,7 +90,7 @@ void EnemyBehaviour::update(float deltaTime, Grid& grid, Entity& player)
     
     case CHASE:
         std::cout << "en chasse" << std::endl;
-
+        SPEED = 1.3f;
         blackboard.SetValue("PlayerInRange", 0);
         blackboard.SetValue("LowLife", 0);
 
@@ -99,7 +99,7 @@ void EnemyBehaviour::update(float deltaTime, Grid& grid, Entity& player)
             lastPlayerPosition = player.shape.getPosition();
             currentState = PATROL;
         }
-        Enemy::chase(player.shape.getPosition(), deltaTime);
+        chase(player.shape.getPosition(), deltaTime);
         PlayerInRange(player);
         break;
 
