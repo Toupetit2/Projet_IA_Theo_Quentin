@@ -2,6 +2,7 @@
 
 EnemyBehaviour::EnemyBehaviour(std::string n, float x, float y, float circleDetect, float circleRange, sf::Vector2i start) : Enemy(x, y) {
     shape.setPosition(x, y);
+    position = { x, y };
     CircleDetect.setRadius(circleDetect);
     CircleDetect.setPosition(x, y);
     CircleDetect.setOrigin(circleDetect / 1.5, circleDetect / 1.5);
@@ -13,6 +14,7 @@ EnemyBehaviour::EnemyBehaviour(std::string n, float x, float y, float circleDete
     blackboard.SetValue("PlayerDetected", 0);
     blackboard.SetValue("PlayerInRange", 0); // ajout de nouvelles valeurs qui vont servir pour les conditions
     blackboard.SetValue("PlayerLowLife", 0);
+    currentState = PATROL;
 }
 
 void EnemyBehaviour::PlayerDetected(Entity& player)
@@ -50,22 +52,20 @@ void EnemyBehaviour::PlayerLowLife()
 
 void EnemyBehaviour::Patrolling()
 {
-    if (blackboard.GetValue("Patrouiller")) {
-        static int currentWaypoint = 0;
-        static sf::Vector2f waypoints[4] = { sf::Vector2f(100, 300), sf::Vector2f(500, 100), sf::Vector2f(100, 300), sf::Vector2f(500, 300) };
-        sf::Vector2f target = waypoints[currentWaypoint];
-        sf::Vector2f direction = target - position;
-        float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+    static int currentWaypoint = 0;
+    static sf::Vector2f waypoints[4] = { sf::Vector2f(300, 150), sf::Vector2f(500, 500), sf::Vector2f(150, 300), sf::Vector2f(500, 300) };
+    sf::Vector2f target = waypoints[currentWaypoint];
+    sf::Vector2f direction = target - position;
+    float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
 
-        if (distance < 5.0f) {
-            currentWaypoint = (currentWaypoint + 1) % 4;
-        }
-        else {
-            direction /= distance;
-            position += direction * 0.2f;
-        }
-        shape.setPosition(position);
+    if (distance < 5.0f) {
+        currentWaypoint = (currentWaypoint + 1) % 4;
     }
+    else {
+        direction /= distance;
+        position += direction * 1.f;
+    }
+    shape.setPosition(position);
 }
 
 void EnemyBehaviour::update(float deltaTime, Grid& grid, Entity& player)
@@ -95,23 +95,28 @@ void EnemyBehaviour::update(float deltaTime, Grid& grid, Entity& player)
 
     root->execute(); // execute le tout
 
-    switch (currentState) {
-    case PATROL:
+    if (currentState == PATROL) {
         Patrolling();
-        break;
-        }
-    /*case CHASE:
-        chase(playerPos);
-        if (!detectPlayer(playerPos)) {
-            lastPlayerPosition = playerPos;
-            currentState = SEARCH;
-        }
-        break;
+        PlayerDetected(player);
+    }
+    //switch (currentState) {
+    //case PATROL:
+    //    Patrolling();
+    //    PlayerDetected(player);
+    //    break;
+    //}
+    //case CHASE:
+    //    chase(playerPos);
+    //    if (!detectPlayer(playerPos)) {
+    //        lastPlayerPosition = playerPos;
+    //        currentState = SEARCH;
+    //    }
+    //    break;
 
-    case SEARCH:
-        search(lastPlayerPosition, deltaTime);
-        break;
-    }*/
+    //case SEARCH:
+    //    search(lastPlayerPosition, deltaTime);
+    //    break;
+    //}
 }
 
 void EnemyBehaviour::draw(sf::RenderWindow& window)

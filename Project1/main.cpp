@@ -52,9 +52,7 @@ int main() {
         for (const auto& enemy : enemies)
             window.draw(enemy.shape);
 
-        enemy_B1->PlayerDetected(player);
         enemy_B1->PlayerInRange(player);
-        enemy_B1->Patrolling();
         enemy_B1->update(deltaTime, grid, player);
         enemy_B1->draw(window);
 
