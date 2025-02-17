@@ -36,11 +36,11 @@ int main() {
                 window.close();
         }
 
-        player.update(deltaTime, grid, player.shape.getPosition());
+        player.update(deltaTime, grid, player);
         for (auto& enemy : vectorEnemy) {
             std::shared_ptr<EnemyFSM> fsm = std::dynamic_pointer_cast<EnemyFSM>(enemy);
             if (fsm) {
-                fsm->update(deltaTime, grid, player.shape.getPosition());
+                fsm->update(deltaTime, grid, player);
             }
         }
 
