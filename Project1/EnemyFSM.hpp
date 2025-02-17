@@ -24,7 +24,7 @@ private:
 	State lastState = SEARCH;
 public:
 	EnemyFSM(float x, float y);
-	void update(float deltaTime, Grid& grid, Entity& playerPos) override;
+	void update(float deltaTime, Grid& grid, Entity& player) override;
 
 	bool detectPlayer(Vector2f pPos);
 

@@ -2,9 +2,9 @@
 #include <cmath>
 
 Enemy::Enemy(float x, float y) : Entity(x, y, sf::Color::Red) {}
-void Enemy::update(float deltaTime, Grid& grid, Entity& playerPos) {}
+void Enemy::update(float deltaTime, Grid& grid, Entity& player) {}
 
-void Enemy::chase(Vector2f pPos)
+void Enemy::chase(Vector2f pPos, float deltaTime)
 {
     sf::Vector2f direction = pPos - shape.getPosition();
     float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
@@ -15,8 +15,20 @@ void Enemy::chase(Vector2f pPos)
     }
 }
 
-void Enemy::patrol()
+void Enemy::patrol(Vector2f ePos)
 {
-    //shape.setPosition(pathfinding(shape.getPosition(), patrolTargetPositions[currentTargetID])[1]);
-}
+    static int currentWaypoint = 0;
+    static sf::Vector2f waypoints[4] = { sf::Vector2f(300, 150), sf::Vector2f(500, 500), sf::Vector2f(150, 300), sf::Vector2f(500, 300) };
+    sf::Vector2f target = waypoints[currentWaypoint];
+    sf::Vector2f direction = target - ePos;
+    float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
 
+    if (distance < 5.0f) {
+        currentWaypoint = (currentWaypoint + 1) % 4;
+    }
+    else {
+        direction /= distance;
+        ePos += direction * 1.f;
+    }
+    shape.setPosition(ePos);
+}

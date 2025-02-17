@@ -10,10 +10,10 @@ public:
     static constexpr float SPEED = 1.0f;
     Enemy(float x, float y);
 
-    void update(float deltaTime, Grid& grid, Entity& playerPos) override;
+    void update(float deltaTime, Grid& grid, Entity& player) override;
 
-    void chase(Vector2f pPos);
-    void patrol();
+    void chase(Vector2f pPos, float deltaTime);
+    void patrol(Vector2f ePos);
     //void search(float deltaTime);
 
 };

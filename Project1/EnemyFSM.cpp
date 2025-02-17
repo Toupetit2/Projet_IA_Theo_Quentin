@@ -2,24 +2,24 @@
 
 EnemyFSM::EnemyFSM(float x, float y) : Enemy(x, y) {}
 
-void EnemyFSM::update(float deltaTime, Grid& grid, Entity& playerPos)
+void EnemyFSM::update(float deltaTime, Grid& grid, Entity& player)
 {
     switch (currentState) {
     case PATROL:
-        Enemy::patrol();
-        if (detectPlayer(playerPos.shape.getPosition()))
+        //Enemy::patrol(player.shape.getPosition());
+        if (detectPlayer(player.shape.getPosition()))
         { 
             currentState = CHASE;
         }
         break;
 
     case CHASE:
-        if (!detectPlayer(playerPos.shape.getPosition()))
+        if (!detectPlayer(player.shape.getPosition()))
         {
-            lastPlayerPos = playerPos.shape.getPosition();
+            lastPlayerPos = player.shape.getPosition();
             currentState = SEARCH;
         }
-        Enemy::chase(playerPos.shape.getPosition());
+        Enemy::chase(player.shape.getPosition(), deltaTime);
         break;
 
     case SEARCH:

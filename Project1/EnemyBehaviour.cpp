@@ -2,14 +2,13 @@
 
 EnemyBehaviour::EnemyBehaviour(std::string n, float x, float y, float circleDetect, float circleRange, sf::Vector2i start) : Enemy(x, y) {
     shape.setPosition(x, y);
-    position = { x, y };
     CircleDetect.setRadius(circleDetect);
     CircleDetect.setPosition(x, y);
-    CircleDetect.setOrigin(circleDetect / 1.5, circleDetect / 1.5);
+    CircleDetect.setOrigin(180, 170);
     CircleDetect.setFillColor(sf::Color(0, 255, 0, 50));
     CircleRange.setRadius(circleRange);
     CircleRange.setPosition(x, y);
-    CircleRange.setOrigin(circleRange / 2, circleRange / 2);
+    CircleRange.setOrigin(30, 30);
     CircleRange.setFillColor(sf::Color(0, 0, 255, 50));
     blackboard.SetValue("PlayerDetected", 0);
     blackboard.SetValue("PlayerInRange", 0); // ajout de nouvelles valeurs qui vont servir pour les conditions
@@ -17,19 +16,22 @@ EnemyBehaviour::EnemyBehaviour(std::string n, float x, float y, float circleDete
     currentState = PATROL;
 }
 
+bool EnemyBehaviour::detectPlayer(Entity& player) {
+
+    float distance = std::sqrt(std::pow(player.shape.getPosition().x - shape.getPosition().x, 2) + std::pow(player.shape.getPosition().y - shape.getPosition().y, 2));
+    return (distance < CircleDetect.getRadius());
+}
+
 void EnemyBehaviour::PlayerDetected(Entity& player)
 {
-    if (player.shape.getGlobalBounds().intersects(CircleDetect.getGlobalBounds())) {
-        shape.setFillColor(sf::Color::Green);
-        blackboard.SetValue("PlayerDetected", 1);
-        currentState = CHASE;
+    shape.setFillColor(sf::Color::Green);
+    blackboard.SetValue("PlayerDetected", 1);
+    currentState = CHASE;
+}
 
-        //shape.move();
-    }
-    else {
-        blackboard.SetValue("PlayerDetected", 0);
-        shape.setFillColor(sf::Color::Red);
-    }
+void EnemyBehaviour::PlayerLowLife()
+{
+
 }
 
 void EnemyBehaviour::PlayerInRange(Entity& player)
@@ -38,34 +40,12 @@ void EnemyBehaviour::PlayerInRange(Entity& player)
         shape.setFillColor(sf::Color::Blue);
         blackboard.SetValue("PlayerInRange", 1);
         blackboard.SetValue("PlayerDetected", 0);
+        //currentState = ATTACK;
     }
     else {
         blackboard.SetValue("PlayerInRange", 0);
         shape.setFillColor(sf::Color::Red);
     }
-}
-
-void EnemyBehaviour::PlayerLowLife()
-{
-
-}
-
-void EnemyBehaviour::Patrolling()
-{
-    static int currentWaypoint = 0;
-    static sf::Vector2f waypoints[4] = { sf::Vector2f(300, 150), sf::Vector2f(500, 500), sf::Vector2f(150, 300), sf::Vector2f(500, 300) };
-    sf::Vector2f target = waypoints[currentWaypoint];
-    sf::Vector2f direction = target - position;
-    float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
-
-    if (distance < 5.0f) {
-        currentWaypoint = (currentWaypoint + 1) % 4;
-    }
-    else {
-        direction /= distance;
-        position += direction * 1.f;
-    }
-    shape.setPosition(position);
 }
 
 void EnemyBehaviour::update(float deltaTime, Grid& grid, Entity& player)
@@ -82,7 +62,7 @@ void EnemyBehaviour::update(float deltaTime, Grid& grid, Entity& player)
     sequenceAttaquer->AddChild(std::make_unique<ConditionNode>(blackboard, "PlayerInRange", 1)); // si player in range == 1 alors attaque le joueur
     sequenceAttaquer->AddChild(std::make_unique<ActionNodeAttack>("Attaquer"));
 
-    sequence->AddChild(std::make_unique<ConditionNode>(blackboard, "PlayerLowLife", 1)); // si player low life == 1 alors fuit le joueur
+    sequence->AddChild(std::make_unique<ConditionNode>(blackboard, "LowLife", 1)); // si player low life == 1 alors fuit le joueur
     sequence->AddChild(std::make_unique<ActionNodeEscape>("Fuir"));
 
     selector->AddChild(std::move(sequenceSuivre)); // met la sequence suivre dans le selector
@@ -95,28 +75,47 @@ void EnemyBehaviour::update(float deltaTime, Grid& grid, Entity& player)
 
     root->execute(); // execute le tout
 
-    if (currentState == PATROL) {
-        Patrolling();
-        PlayerDetected(player);
-    }
-    //switch (currentState) {
-    //case PATROL:
-    //    Patrolling();
-    //    PlayerDetected(player);
-    //    break;
-    //}
-    //case CHASE:
-    //    chase(playerPos);
-    //    if (!detectPlayer(playerPos)) {
-    //        lastPlayerPosition = playerPos;
-    //        currentState = SEARCH;
-    //    }
-    //    break;
+    switch (currentState) {
+    case PATROL:
+        std::cout << "en patrouille" << std::endl;
+        blackboard.SetValue("PlayerDetected", 0);
+        blackboard.SetValue("PlayerInRange", 0);
+        blackboard.SetValue("LowLife", 0);
 
-    //case SEARCH:
-    //    search(lastPlayerPosition, deltaTime);
-    //    break;
-    //}
+        if (detectPlayer(player)) {
+            PlayerDetected(player);
+        }
+        patrol(shape.getPosition());
+        break;
+    
+    case CHASE:
+        std::cout << "en chasse" << std::endl;
+
+        blackboard.SetValue("PlayerInRange", 0);
+        blackboard.SetValue("LowLife", 0);
+
+        if (!detectPlayer(player))
+        {
+            lastPlayerPosition = player.shape.getPosition();
+            currentState = PATROL;
+        }
+        Enemy::chase(player.shape.getPosition(), deltaTime);
+        PlayerInRange(player);
+        break;
+
+    case SEARCH:
+        std::cout << "en recherche" << std::endl;
+
+        blackboard.SetValue("PlayerDetected", 0);
+        blackboard.SetValue("PlayerInRange", 0);
+        blackboard.SetValue("LowLife", 0);
+
+        //search(lastPlayerPosition, deltaTime);
+        break;
+    }
+
+    CircleDetect.setPosition(shape.getPosition());
+    CircleRange.setPosition(shape.getPosition());
 }
 
 void EnemyBehaviour::draw(sf::RenderWindow& window)
@@ -125,41 +124,3 @@ void EnemyBehaviour::draw(sf::RenderWindow& window)
     window.draw(CircleRange);
     window.draw(shape);
 }
-
-/*void PNJ::chase(sf::Vector2f playerPos) {
-    sf::Vector2f direction = playerPos - position;
-    float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
-
-    if (distance > 0) {
-        direction /= distance;
-        position += direction * 0.2f;
-    }
-
-    circle.setPosition(position);
-}
-
-void PNJ::search(sf::Vector2f lastPlayerPos, float deltaTime) {
-    static float searchTimer = 0.0f;
-    static sf::Vector2f searchDirection;
-
-    if (searchTimer == 0.0f) {
-        searchDirection = sf::Vector2f(rand() % 2 == 0 ? -1 : 1, rand() % 2 == 0 ? -1 : 1);
-        searchDirection /= std::sqrt(searchDirection.x * searchDirection.x + searchDirection.y * searchDirection.y);
-    }
-
-    searchTimer += deltaTime;
-    if (searchTimer < 10.0f) {
-        position += searchDirection * 5.f * deltaTime;
-    }
-    else {
-        searchTimer = 0.0f;
-        currentState = PATROL;
-    }
-
-    float distance = std::sqrt((lastPlayerPos.x - position.x) * (lastPlayerPos.x - position.x) + (lastPlayerPos.y - position.y) * (lastPlayerPos.y - position.y));
-    if (distance < detectionRadius) {
-        searchTimer = 0.0f;
-    }
-
-    circle.setPosition(position);
-}*/
