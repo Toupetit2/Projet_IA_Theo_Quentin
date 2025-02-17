@@ -16,6 +16,11 @@ protected :
     bool needsRepath;
     sf::Vector2f lastPlayerPosition;
 
+    sf::Vector2f firstPosition{ 100, 300 };
+    sf::Vector2f secondPosition{ 300, 300 };
+    sf::Vector2f thridPosition{ 300, 500 };
+    sf::Vector2f fourthPosition{ 300, 300 };
+
 public:
 
     enum State { PATROL, CHASE, SEARCH, ATTACK };
@@ -33,6 +38,8 @@ public:
     void PlayerInRange(Entity& player);
 
     void PlayerLowLife();
+
+    void patrol(Vector2f ePos, float deltaTime, sf::Vector2f& firstPoint, sf::Vector2f& secondPoint, sf::Vector2f& thirdPoint, sf::Vector2f& fourthPoint) override;
 
     void update(float deltaTime, Grid& grid, Entity& player) override;
 

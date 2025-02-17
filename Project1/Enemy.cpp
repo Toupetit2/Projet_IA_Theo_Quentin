@@ -19,10 +19,10 @@ void Enemy::chase(Vector2f pPos, float deltaTime, Grid& grid)
     }
 }
 
-void Enemy::patrol(Vector2f ePos, float deltaTime)
+void Enemy::patrol(Vector2f ePos, float deltaTime, sf::Vector2f& firstPoint, sf::Vector2f& secondPoint, sf::Vector2f& thirdPoint, sf::Vector2f& fourthPoint)
 {
     static int currentWaypoint = 0;
-    static sf::Vector2f waypoints[4] = { sf::Vector2f(300, 150), sf::Vector2f(500, 500), sf::Vector2f(150, 300), sf::Vector2f(500, 300) };
+    static sf::Vector2f waypoints[4] = { sf::Vector2f(firstPoint), sf::Vector2f(secondPoint), sf::Vector2f(thirdPoint), sf::Vector2f(fourthPoint) };
     sf::Vector2f target = waypoints[currentWaypoint];
     sf::Vector2f direction = target - ePos;
     float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);

@@ -34,6 +34,24 @@ void EnemyBehaviour::PlayerLowLife()
 
 }
 
+void EnemyBehaviour::patrol(Vector2f ePos, float deltaTime, sf::Vector2f& firstPoint, sf::Vector2f& secondPoint, sf::Vector2f& thirdPoint, sf::Vector2f& fourthPoint)
+{
+    static int currentWaypoint = 0;
+    static sf::Vector2f waypoints[4] = { sf::Vector2f(firstPoint), sf::Vector2f(secondPoint), sf::Vector2f(thirdPoint), sf::Vector2f(fourthPoint) };
+    sf::Vector2f target = waypoints[currentWaypoint];
+    sf::Vector2f direction = target - ePos;
+    float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+
+    if (distance < 5.0f) {
+        currentWaypoint = (currentWaypoint + 1) % 4;
+    }
+    else {
+        direction /= distance;
+        ePos += direction * deltaTime * SPEED;
+    }
+    shape.setPosition(ePos);
+}
+
 void EnemyBehaviour::PlayerInRange(Entity& player)
 {
     if (player.shape.getGlobalBounds().intersects(CircleRange.getGlobalBounds()) && player.shape.getGlobalBounds().intersects(CircleDetect.getGlobalBounds())) {
@@ -85,7 +103,7 @@ void EnemyBehaviour::update(float deltaTime, Grid& grid, Entity& player)
         if (detectPlayer(player)) {
             PlayerDetected(player);
         }
-        patrol(shape.getPosition(), deltaTime);
+        patrol(shape.getPosition(), deltaTime, firstPosition, secondPosition, thridPosition, fourthPosition);
         break;
     
     case CHASE:
