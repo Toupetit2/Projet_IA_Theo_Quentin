@@ -21,7 +21,7 @@ void EnemyFSM::update(float deltaTime, Grid& grid, Entity& player)
             currentState = SEARCH;
         }
 
-        Enemy::chase(playerPos.shape.getPosition(), deltaTime, grid);
+        Enemy::chase(player.shape.getPosition(), deltaTime, grid);
         break;
 
     case SEARCH:

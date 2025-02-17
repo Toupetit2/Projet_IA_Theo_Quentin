@@ -15,7 +15,7 @@ public:
 
 
     void chase(Vector2f pPos, float deltaTime, Grid& grid);
-    void patrol(Vector2f ePos);
+    void patrol(Vector2f ePos, float deltaTime);
 
     //void search(float deltaTime);
 

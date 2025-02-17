@@ -19,7 +19,7 @@ void Enemy::chase(Vector2f pPos, float deltaTime, Grid& grid)
     }
 }
 
-void Enemy::patrol(Vector2f ePos)
+void Enemy::patrol(Vector2f ePos, float deltaTime)
 
 {
     static int currentWaypoint = 0;
