@@ -21,7 +21,7 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Jeu SFML - IA Ennemis");
     window.setFramerateLimit(60);
 
-    Player player(200, 200);
+    Player player(600, 200);
     std::vector<shared_ptr<Enemy>> vectorEnemy;
     shared_ptr<EnemyFSM> enemy1 = make_shared<EnemyFSM>(EnemyFSM(100, 100));
     vectorEnemy.push_back(enemy1);
@@ -32,7 +32,7 @@ int main() {
     vectorEnemyBehaviour.push_back(enemy_B1);
     
     Grid grid;
-    grid.loadFromFile("map.txt");
+    grid.loadFromFile("map2.txt");
 
     sf::Clock clock;
 

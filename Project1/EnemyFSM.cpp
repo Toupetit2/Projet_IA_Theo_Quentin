@@ -7,7 +7,7 @@ void EnemyFSM::update(float deltaTime, Grid& grid, Entity& player)
 {
     switch (currentState) {
     case PATROL:
-        //Enemy::patrol(player.shape.getPosition());
+        patrol(shape.getPosition(), deltaTime);
         if (detectPlayer(player.shape.getPosition()))
         { 
             currentState = CHASE;
@@ -21,7 +21,7 @@ void EnemyFSM::update(float deltaTime, Grid& grid, Entity& player)
             currentState = SEARCH;
         }
 
-        Enemy::chase(player.shape.getPosition(), deltaTime, grid);
+        chase(player.shape.getPosition(), deltaTime, grid);
         break;
 
     case SEARCH:

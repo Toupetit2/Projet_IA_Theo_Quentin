@@ -20,7 +20,6 @@ void Enemy::chase(Vector2f pPos, float deltaTime, Grid& grid)
 }
 
 void Enemy::patrol(Vector2f ePos, float deltaTime)
-
 {
     static int currentWaypoint = 0;
     static sf::Vector2f waypoints[4] = { sf::Vector2f(300, 150), sf::Vector2f(500, 500), sf::Vector2f(150, 300), sf::Vector2f(500, 300) };
@@ -33,7 +32,7 @@ void Enemy::patrol(Vector2f ePos, float deltaTime)
     }
     else {
         direction /= distance;
-        ePos += direction * 1.f;
+        ePos += direction * deltaTime * SPEED;
     }
     shape.setPosition(ePos);
 }

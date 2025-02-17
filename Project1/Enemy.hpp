@@ -7,7 +7,7 @@ class Enemy : public Entity {
 private:
 
 public:
-    float SPEED = 1.0f;
+    float SPEED = 100.f;
 
     Enemy(float x, float y);
 
