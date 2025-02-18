@@ -14,7 +14,7 @@ public:
     void update(float deltaTime, Grid& grid, Entity& player) override;
 
     void chase(Vector2f pPos, float deltaTime, Grid& grid);
-    virtual void patrol(Vector2f ePos, float deltaTime, sf::Vector2f& firstPoint, sf::Vector2f& secondPoint, sf::Vector2f& thirdPoint, sf::Vector2f& fourthPoint);
+    virtual void patrol(Vector2f ePos, float deltaTime, sf::Vector2f& firstPoint, sf::Vector2f& secondPoint, sf::Vector2f& thirdPoint, sf::Vector2f& fourthPoint, Grid& grid);
 
     //void search(float deltaTime);
 

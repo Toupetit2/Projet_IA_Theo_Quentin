@@ -2,13 +2,16 @@
 #include "Pathfinding.hpp"
 #include "time.h"
 
-EnemyFSM::EnemyFSM(float x, float y, int hp) : Enemy(x, y, hp) {}
+EnemyFSM::EnemyFSM(float x, float y, int hp) : Enemy(x, y, hp) {
+    CirclePoint.setRadius(20.f);
+    CirclePoint.setFillColor(sf::Color::Yellow);
+}
 
 void EnemyFSM::update(float deltaTime, Grid& grid, Entity& player)
 {
     switch (currentState) {
     case PATROL:
-        patrol(shape.getPosition(), deltaTime, firstPosition, secondPosition, thridPosition, fourthPosition);
+        patrol(shape.getPosition(), deltaTime, firstPosition, secondPosition, thridPosition, fourthPosition, grid);
 
         if (detectPlayer(player.shape.getPosition()))
         { 
@@ -101,6 +104,11 @@ void EnemyFSM::search(Vector2f lastPlayerPosition, float deltaTime, Grid& grid)
     }
 }
 
+void EnemyFSM::draw(sf::RenderWindow& window)
+{
+    window.draw(CirclePoint);
+}
+
 bool EnemyFSM::collisionWithWall(Grid& grid)
 {
     int left = shape.getPosition().x / 40;
@@ -127,7 +135,7 @@ bool EnemyFSM::collisionWithWall(Grid& grid)
     return false; // Pas de collision
 }
 
-void EnemyFSM::patrol(Vector2f ePos, float deltaTime, sf::Vector2f& firstPoint, sf::Vector2f& secondPoint, sf::Vector2f& thirdPoint, sf::Vector2f& fourthPoint)
+void EnemyFSM::patrol(Vector2f ePos, float deltaTime, sf::Vector2f& firstPoint, sf::Vector2f& secondPoint, sf::Vector2f& thirdPoint, sf::Vector2f& fourthPoint, Grid& grid)
 {
     static int currentWaypoint = 0;
     static sf::Vector2f waypoints[4] = { sf::Vector2f(firstPoint), sf::Vector2f(secondPoint), sf::Vector2f(thirdPoint), sf::Vector2f(fourthPoint) };
@@ -142,5 +150,25 @@ void EnemyFSM::patrol(Vector2f ePos, float deltaTime, sf::Vector2f& firstPoint, 
         direction /= distance;
         ePos += direction * deltaTime * SPEED;
     }
-    shape.setPosition(ePos);
+
+    Pathfinding pathfinding;
+    vector<Vector2i> path = pathfinding.findPath(grid, Vector2i(shape.getPosition().x / 40, shape.getPosition().y / 40), Vector2i(waypoints[waypointCount].x / 40, waypoints[waypointCount].y / 40));
+
+    if ((shape.getPosition().x) / 40 < (waypoints[waypointCount].x + 40) / 40 && (shape.getPosition().x) / 40 > (waypoints[waypointCount].x - 40) / 40
+        && (shape.getPosition().y) / 40 < (waypoints[waypointCount].y + 40) / 40 && (shape.getPosition().y) / 40 > (waypoints[waypointCount].y - 40) / 40) {
+        waypointCount += 1;
+        cout << "numero de point : " << waypointCount << endl;
+        if (waypointCount > 3) {
+            waypointCount = 0;
+        }
+    }
+
+    if (path.size() > 1) { // On se rapproche seulement si on est a plus de 5 pixels
+        sf::Vector2f direction = Vector2f(path[1] * 40) - shape.getPosition();
+        float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+        float angle = std::atan2(direction.y, direction.x); // Angle en radians
+        shape.setPosition(shape.getPosition().x + (std::cos(angle) * SPEED * deltaTime), shape.getPosition().y + std::sin(angle) * SPEED * deltaTime);
+    }
+    CirclePoint.setPosition(waypoints[waypointCount]);
 }
+

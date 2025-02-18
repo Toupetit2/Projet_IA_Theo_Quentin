@@ -13,6 +13,8 @@ EnemyBehaviour::EnemyBehaviour(std::string n, float x, float y, float circleDete
     blackboard.SetValue("PlayerDetected", 0);
     blackboard.SetValue("PlayerInRange", 0); // ajout de nouvelles valeurs qui vont servir pour les conditions
     blackboard.SetValue("PlayerLowLife", 0);
+    CirclePoint.setRadius(20.f);
+    CirclePoint.setFillColor(sf::Color::Magenta);
     currentState = PATROL;
 }
 
@@ -24,7 +26,7 @@ bool EnemyBehaviour::detectPlayer(Entity& player) {
 
 void EnemyBehaviour::playerDetected(Entity& player)
 {
-    shape.setFillColor(sf::Color::Green);
+    shape.setFillColor(sf::Color::Red);
     blackboard.SetValue("PlayerDetected", 1);
     currentState = CHASE;
 }
@@ -32,14 +34,14 @@ void EnemyBehaviour::playerDetected(Entity& player)
 void EnemyBehaviour::playerInRange(Entity& player)
 {
     if (player.shape.getGlobalBounds().intersects(CircleRange.getGlobalBounds()) && player.shape.getGlobalBounds().intersects(CircleDetect.getGlobalBounds())) {
-        shape.setFillColor(sf::Color::Blue);
+        shape.setFillColor(sf::Color::White);
         blackboard.SetValue("PlayerInRange", 1);
         blackboard.SetValue("PlayerDetected", 0);
         //currentState = ATTACK;
     }
     else {
         blackboard.SetValue("PlayerInRange", 0);
-        shape.setFillColor(sf::Color::Red);
+        shape.setFillColor(sf::Color::Blue);
     }
 }
 
@@ -101,12 +103,11 @@ void EnemyBehaviour::patrol(Vector2f ePos, float deltaTime, sf::Vector2f& firstP
 
     Pathfinding pathfinding;
     vector<Vector2i> path = pathfinding.findPath(grid, Vector2i(shape.getPosition().x / 40, shape.getPosition().y / 40), Vector2i(waypoints[waypointCount].x / 40, waypoints[waypointCount].y / 40));
-    //cout << "enemy : " << shape.getPosition().x / 40 << ' ' << shape.getPosition().y / 40 << endl;
-    //cout << "waypoint : " << waypoints[waypointCount].x / 40 << ' ' << waypoints[waypointCount].y / 40 << endl;
-    if ((shape.getPosition().x) / 40 < (waypoints[waypointCount].x + 35) / 40 && (shape.getPosition().x) / 40 > (waypoints[waypointCount].x - 35) / 40 
-        && (shape.getPosition().y) / 40 < (waypoints[waypointCount].y + 35) / 40 && (shape.getPosition().y) / 40 > (waypoints[waypointCount].y - 35) / 40) {
+
+    if ((shape.getPosition().x) / 40 < (waypoints[waypointCount].x + 50) / 40 && (shape.getPosition().x) / 40 > (waypoints[waypointCount].x - 50) / 40 
+        && (shape.getPosition().y) / 40 < (waypoints[waypointCount].y + 50) / 40 && (shape.getPosition().y) / 40 > (waypoints[waypointCount].y - 50) / 40) {
         waypointCount += 1;
-        cout << "numero de point : " << waypointCount << endl;
+        //cout << "numero de point : " << waypointCount << endl;
         if (waypointCount > 3) {
             waypointCount = 0;
         }
@@ -118,8 +119,7 @@ void EnemyBehaviour::patrol(Vector2f ePos, float deltaTime, sf::Vector2f& firstP
         float angle = std::atan2(direction.y, direction.x); // Angle en radians
         shape.setPosition(shape.getPosition().x + (std::cos(angle) * SPEED * deltaTime), shape.getPosition().y + std::sin(angle) * SPEED * deltaTime);
     }
-
-    //shape.setPosition(ePos);
+    CirclePoint.setPosition(waypoints[waypointCount]);
 }
 
 void EnemyBehaviour::update(float deltaTime, Grid& grid, Entity& player)
@@ -197,4 +197,5 @@ void EnemyBehaviour::draw(sf::RenderWindow& window)
     window.draw(CircleDetect);
     window.draw(CircleRange);
     window.draw(shape);
+    window.draw(CirclePoint);
 }
