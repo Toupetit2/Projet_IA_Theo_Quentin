@@ -21,6 +21,7 @@ public:
     void loadFromFile(const std::string& filename);
     void draw(sf::RenderWindow& window);
     Cell& getCell(int x, int y);
+    sf::Vector2f getSize();
 private:
     std::vector<std::vector<Cell>> cells;
 };

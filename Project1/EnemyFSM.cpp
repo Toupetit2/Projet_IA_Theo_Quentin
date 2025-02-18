@@ -1,5 +1,6 @@
 #include "EnemyFSM.hpp"
 #include "Pathfinding.hpp"
+#include "time.h"
 
 EnemyFSM::EnemyFSM(float x, float y) : Enemy(x, y) {}
 
@@ -7,7 +8,7 @@ void EnemyFSM::update(float deltaTime, Grid& grid, Entity& player)
 {
     switch (currentState) {
     case PATROL:
-        //Enemy::patrol(player.shape.getPosition());
+        Enemy::patrol(shape.getPosition(), deltaTime);
         if (detectPlayer(player.shape.getPosition()))
         { 
             currentState = CHASE;
@@ -35,18 +36,21 @@ void EnemyFSM::update(float deltaTime, Grid& grid, Entity& player)
         if (lastState == PATROL)
         {
             cout << "PATROL" << endl;
+            shape.setFillColor(Color::Blue);
         }
         else if (lastState == CHASE)
         {
             cout << "CHASE" << endl;
+            shape.setFillColor(Color::Red);
         }
         else if (lastState == SEARCH)
         {
             cout << "SEARCH" << endl;
+            shape.setFillColor(Color::Green);
         }
         else 
         {
-            cout << "ERROR" << endl;
+            cout << "ERROR - UNKNOWN STATE" << endl;
         }
     }
 }
@@ -61,7 +65,7 @@ bool EnemyFSM::detectPlayer(Vector2f pPos)
 
 void EnemyFSM::search(Vector2f lastPlayerPosition, float deltaTime, Grid& grid)
 {
-    Pathfinding pathfinding;
+    Vector2f movement = Vector2f(0.f, 0.f);
     float distanceBefore = std::sqrt((lastPlayerPos.x - shape.getPosition().x) * (lastPlayerPos.x - shape.getPosition().x) + (lastPlayerPos.y - shape.getPosition().y) * (lastPlayerPos.y - shape.getPosition().y));
 
     if (timeSinceSearchStarted == 0.0f || lastDirectionChangeTime > 1.f) {
@@ -74,7 +78,7 @@ void EnemyFSM::search(Vector2f lastPlayerPosition, float deltaTime, Grid& grid)
     timeSinceSearchStarted += deltaTime;
     lastDirectionChangeTime += deltaTime;
     if (timeSinceSearchStarted < searchTime) {
-        shape.setPosition(shape.getPosition().x + (searchDirection.x * SPEED * deltaTime), shape.getPosition().y + (searchDirection.y * SPEED * deltaTime));
+        movement = Vector2f((searchDirection.x * SPEED * deltaTime), (searchDirection.y * SPEED * deltaTime));
     }
     else {
         timeSinceSearchStarted = 0.0f;
@@ -85,30 +89,40 @@ void EnemyFSM::search(Vector2f lastPlayerPosition, float deltaTime, Grid& grid)
     if (distanceAfter > searchRange && distanceAfter > distanceBefore) {
         lastDirectionChangeTime = 10.0f;
     }
-    if (collisionWithWall(grid))
+    if (!collisionWithWall(grid))
     {
-        cout << "collision !!!!!!!!!!!!!!!!!" << endl;
-        shape.setPosition(shape.getPosition().x - (searchDirection.x * SPEED * deltaTime), shape.getPosition().y - (searchDirection.y * SPEED * deltaTime));
-        lastDirectionChangeTime = 10.0f;
+        shape.setPosition(shape.getPosition() + movement);
+    }
+    else
+    {
+        shape.setPosition(shape.getPosition() - movement);
+        lastDirectionChangeTime = 10;
     }
 }
 
 bool EnemyFSM::collisionWithWall(Grid& grid)
 {
-    sf::FloatRect enemyBounds = shape.getGlobalBounds();
+    int left = shape.getPosition().x / 40;
+    int right = (shape.getPosition().x + shape.getGlobalBounds().width) / 40;
+    int top = shape.getPosition().y  / 40;
+    int bottom = (shape.getPosition().y + shape.getGlobalBounds().height) / 40;
 
-    // Calcul des indices de la grille o� se trouve l'ennemi
-    int left = enemyBounds.left / 40;
-    int right = (enemyBounds.left + enemyBounds.width) / 40;
-    int top = enemyBounds.top / 40;
-    int bottom = (enemyBounds.top + enemyBounds.height) / 40;
-
-    cout << left << " " << right << " " << top << " " << bottom << endl;
-
-    if (!grid.getCell(top, left).walkable || !grid.getCell(top, right).walkable ||
-        !grid.getCell(bottom, left).walkable || !grid.getCell(bottom, right).walkable) {
-        return true; // Collision d�tect�e
+    try
+    {
+        if (left < 0 || right >= grid.getSize().x || top < 0 && bottom >= grid.getSize().y)
+        {
+            throw std::out_of_range("Les positions de l'ennemi sont en dehors de la grille. ");
+        }
+    }
+    catch (const std::out_of_range& e)
+    {
+        cout << "Erreur : " << e.what() << endl;
     }
 
-    return false; // Pas de collision
+    if (!grid.getCell(left, top).walkable || !grid.getCell(right, top).walkable ||
+        !grid.getCell(left, bottom).walkable || !grid.getCell(right, bottom).walkable) {
+        return true;
+    }
+
+    return false;
 }
