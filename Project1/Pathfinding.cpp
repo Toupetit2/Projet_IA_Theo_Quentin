@@ -1,6 +1,8 @@
 #include "Pathfinding.hpp"
 #include <queue>
 #include <algorithm>
+#include <iostream>
+using namespace std;
 
 std::vector<sf::Vector2i> Pathfinding::findPath(Grid& grid, sf::Vector2i start, sf::Vector2i end) {
     std::vector<std::vector<bool>> visited(GRID_HEIGHT, std::vector<bool>(GRID_WIDTH, false));

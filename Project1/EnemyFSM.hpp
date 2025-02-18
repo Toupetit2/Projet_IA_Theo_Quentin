@@ -22,15 +22,23 @@ private:
 	vector<Vector2f> patrolTargetPositions = { Vector2f(10, 10), Vector2f(300, 50) };
 	int currentTargetID = 0;
 
+	sf::Vector2f firstPosition{ 150, 100 };
+	sf::Vector2f secondPosition{ 150, 300 };
+	sf::Vector2f thridPosition{ 500, 300 };
+	sf::Vector2f fourthPosition{ 300, 150 };
+
 	//debug
 	State lastState = SEARCH;
 public:
-	EnemyFSM(float x, float y);
+	EnemyFSM(float x, float y, int hp);
+
 	void update(float deltaTime, Grid& grid, Entity& player) override;
 
 	bool detectPlayer(Vector2f pPos);
 
 	bool collisionWithWall(Grid& grid);
+
+	void patrol(Vector2f ePos, float deltaTime, sf::Vector2f& firstPoint, sf::Vector2f& secondPoint, sf::Vector2f& thirdPoint, sf::Vector2f& fourthPoint) override;
 
 	void search(Vector2f lastPlayerPosition, float deltaTime, Grid& grid);
 };

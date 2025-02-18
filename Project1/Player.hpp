@@ -2,13 +2,19 @@
 #define PLAYER_HPP
 
 #include "Entity.hpp"
+#include "Enemy.hpp"
 
 class Player : public Entity {
 public:
-    static constexpr float SPEED = 200.0f;
-    Player(float x, float y);
+    float SPEED = 200.0f;
+    int DAMAGE = 20;
+    float ATTACK_COOLDOWN = 0.5f;
+    float attackTimer;
 
-    void update(float deltaTime, Grid& grid, Entity& player) override;
+    Player(float x, float y, int hp);
+    //void attack(std::vector<Entity*> enemies);
+    void attack(Entity& enemy);
+    void update(float deltaTime, Grid& grid, Entity& enemy) override;
 
 };
 
