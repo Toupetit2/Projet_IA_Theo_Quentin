@@ -46,3 +46,8 @@ void Grid::draw(sf::RenderWindow& window) {
 Cell& Grid::getCell(int x, int y) {
     return cells[y][x];
 }
+
+sf::Vector2f Grid::getSize()
+{
+    return sf::Vector2f(GRID_WIDTH, GRID_HEIGHT);
+}

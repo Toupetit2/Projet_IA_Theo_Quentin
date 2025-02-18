@@ -34,8 +34,6 @@ void Enemy::patrol(Vector2f ePos, float deltaTime)
     else {
         direction /= distance;
         ePos += direction * SPEED * deltaTime;
-        cout << ePos.x << ", " << ePos.y << endl;
-        
     }
     shape.setPosition(ePos);
 }
