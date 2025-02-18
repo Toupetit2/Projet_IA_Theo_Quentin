@@ -31,7 +31,8 @@ void Enemy::patrol(Vector2f ePos, float deltaTime, sf::Vector2f& firstPoint, sf:
     }
     else {
         direction /= distance;
-        ePos += direction * deltaTime * SPEED;
+
+        ePos += direction * SPEED * deltaTime;
     }
     shape.setPosition(ePos);
 }
