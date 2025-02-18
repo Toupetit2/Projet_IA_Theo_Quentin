@@ -15,13 +15,17 @@ protected :
     sf::Clock moveClock;
     bool needsRepath;
     sf::Vector2f lastPlayerPosition;
+    int waypointCount = 0;
 
-    sf::Vector2f firstPosition{ 100, 300 };
-    sf::Vector2f secondPosition{ 300, 300 };
-    sf::Vector2f thridPosition{ 300, 500 };
-    sf::Vector2f fourthPosition{ 300, 300 };
+    sf::Vector2f firstPosition{ 100, 350 };
+    sf::Vector2f secondPosition{ 200, 350 };
+    sf::Vector2f thridPosition{ 300, 350 };
+    sf::Vector2f fourthPosition{ 400, 350 };
 
 public:
+    enum StateWalkable { ONE, TWO, THREE, FOUR, FIVE };
+
+    StateWalkable walkableState;
 
     enum State { PATROL, CHASE, SEARCH, ATTACK };
 
@@ -38,8 +42,6 @@ public:
     void playerInRange(Entity& player);
 
     void playerLowLife();
-
-    void collisionWall(float deltaTime, Grid& grid, Vector2f ePos);
 
     void patrol(Vector2f ePos, float deltaTime, sf::Vector2f& firstPoint, sf::Vector2f& secondPoint, sf::Vector2f& thirdPoint, sf::Vector2f& fourthPoint, Grid& grid);
 

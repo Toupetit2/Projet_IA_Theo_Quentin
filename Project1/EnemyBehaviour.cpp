@@ -48,29 +48,40 @@ void EnemyBehaviour::playerLowLife()
 
 }
 
-void EnemyBehaviour::collisionWall(float deltaTime, Grid& grid, Vector2f ePos)
-{
-    //sf::Vector2f movement(0.f, 0.f);
-    //if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z)) movement.y -= SPEED * deltaTime;
-    //if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) movement.y += SPEED * deltaTime;
-    //if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) movement.x -= SPEED * deltaTime;
-    //if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) movement.x += SPEED * deltaTime;
-
-    sf::Vector2f newPosition = shape.getPosition();
-    sf::FloatRect newBounds(newPosition, shape.getSize());
-
-    auto isWalkable = [&](float x, float y) {
-        int gridX = static_cast<int>(x / CELL_SIZE);
-        int gridY = static_cast<int>(y / CELL_SIZE);
-        return gridX >= 0 && gridX < GRID_WIDTH && gridY >= 0 && gridY < GRID_HEIGHT && grid.getCell(gridX, gridY).walkable;
-        };
-
-    if (isWalkable(newBounds.left - 1, newBounds.top - 1) &&
-        isWalkable(newBounds.left + newBounds.width + 1, newBounds.top - 1) &&
-        isWalkable(newBounds.left - 1, newBounds.top + newBounds.height + 1) &&
-        isWalkable(newBounds.left + newBounds.width + 1, newBounds.top + newBounds.height + 1)) {
-    }
-}
+//void EnemyBehaviour::collisionWall(float deltaTime, Grid& grid, Vector2f direction)
+//{
+//    sf::Vector2f newPosition = shape.getPosition() + direction;
+//    sf::FloatRect newBounds(newPosition, shape.getSize());
+//
+//    auto isWalkable = [&](float x, float y) {
+//        int gridX = static_cast<int>(x / CELL_SIZE);
+//        int gridY = static_cast<int>(y / CELL_SIZE);
+//        return gridX >= 0 && gridX < GRID_WIDTH && gridY >= 0 && gridY < GRID_HEIGHT && grid.getCell(gridX, gridY).walkable;
+//    };
+//
+//    if (isWalkable(newBounds.left - 1, newBounds.top - 1) &&
+//        isWalkable(newBounds.left + newBounds.width + 1, newBounds.top - 1) &&
+//        isWalkable(newBounds.left - 1, newBounds.top + newBounds.height + 1) &&
+//        isWalkable(newBounds.left + newBounds.width + 1, newBounds.top + newBounds.height + 1)) {
+//
+//    }
+//
+//    if (!isWalkable(newBounds.left - 1, newBounds.top - 1)) {
+//        cout << "left - 1 et top - 1" << endl;
+//    }
+//    else if (!isWalkable(newBounds.left + newBounds.width + 1, newBounds.top - 1)) {
+//        cout << "left + width + 1 et top - 1" << endl;
+//    }
+//    else if (!isWalkable(newBounds.left - 1, newBounds.top + newBounds.height + 1)) {
+//        cout << "left - 1 et top + height + 1" << endl;
+//    }
+//    else if (!isWalkable(newBounds.left + newBounds.width + 1, newBounds.top + newBounds.height + 1)) {
+//        cout << "left + width + 1 et top + height + 1" << endl;
+//    }
+//    else if (!isWalkable(newBounds.left + newBounds.width + 1, newBounds.top + newBounds.height + 1)) {
+//        cout << "left + width + 1 et top + height + 1" << endl;
+//    }
+//}
 
 void EnemyBehaviour::patrol(Vector2f ePos, float deltaTime, sf::Vector2f& firstPoint, sf::Vector2f& secondPoint, sf::Vector2f& thirdPoint, sf::Vector2f& fourthPoint, Grid& grid)
 {
@@ -87,8 +98,28 @@ void EnemyBehaviour::patrol(Vector2f ePos, float deltaTime, sf::Vector2f& firstP
         direction /= distance;
         ePos += direction * deltaTime * SPEED;
     }
-    //collisionWall(deltaTime, grid, ePos);
-    shape.setPosition(ePos);
+
+    Pathfinding pathfinding;
+    vector<Vector2i> path = pathfinding.findPath(grid, Vector2i(shape.getPosition().x / 40, shape.getPosition().y / 40), Vector2i(waypoints[waypointCount].x / 40, waypoints[waypointCount].y / 40));
+    //cout << "enemy : " << shape.getPosition().x / 40 << ' ' << shape.getPosition().y / 40 << endl;
+    //cout << "waypoint : " << waypoints[waypointCount].x / 40 << ' ' << waypoints[waypointCount].y / 40 << endl;
+    if ((shape.getPosition().x) / 40 < (waypoints[waypointCount].x + 35) / 40 && (shape.getPosition().x) / 40 > (waypoints[waypointCount].x - 35) / 40 
+        && (shape.getPosition().y) / 40 < (waypoints[waypointCount].y + 35) / 40 && (shape.getPosition().y) / 40 > (waypoints[waypointCount].y - 35) / 40) {
+        waypointCount += 1;
+        cout << "numero de point : " << waypointCount << endl;
+        if (waypointCount > 3) {
+            waypointCount = 0;
+        }
+    }
+
+    if (path.size() > 1) { // On se rapproche seulement si on est a plus de 5 pixels
+        sf::Vector2f direction = Vector2f(path[1] * 40) - shape.getPosition();
+        float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+        float angle = std::atan2(direction.y, direction.x); // Angle en radians
+        shape.setPosition(shape.getPosition().x + (std::cos(angle) * SPEED * deltaTime), shape.getPosition().y + std::sin(angle) * SPEED * deltaTime);
+    }
+
+    //shape.setPosition(ePos);
 }
 
 void EnemyBehaviour::update(float deltaTime, Grid& grid, Entity& player)
@@ -120,7 +151,7 @@ void EnemyBehaviour::update(float deltaTime, Grid& grid, Entity& player)
 
     switch (currentState) {
     case PATROL:
-        std::cout << "en patrouille" << std::endl;
+        //std::cout << "en patrouille" << std::endl;
         blackboard.SetValue("PlayerDetected", 0);
         blackboard.SetValue("PlayerInRange", 0);
         blackboard.SetValue("LowLife", 0);
@@ -132,7 +163,7 @@ void EnemyBehaviour::update(float deltaTime, Grid& grid, Entity& player)
         break;
     
     case CHASE:
-        std::cout << "en chasse" << std::endl;
+        //std::cout << "en chasse" << std::endl;
         SPEED = 90.f;
         blackboard.SetValue("PlayerInRange", 0);
         blackboard.SetValue("LowLife", 0);
@@ -147,7 +178,7 @@ void EnemyBehaviour::update(float deltaTime, Grid& grid, Entity& player)
         break;
 
     case SEARCH:
-        std::cout << "en recherche" << std::endl;
+        //std::cout << "en recherche" << std::endl;
 
         blackboard.SetValue("PlayerDetected", 0);
         blackboard.SetValue("PlayerInRange", 0);

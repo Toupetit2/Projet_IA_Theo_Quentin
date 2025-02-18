@@ -87,7 +87,7 @@ void EnemyFSM::search(Vector2f lastPlayerPosition, float deltaTime, Grid& grid)
     }
     if (collisionWithWall(grid))
     {
-        cout << "collision !!!!!!!!!!!!!!!!!" << endl;
+        //cout << "collision !!!!!!!!!!!!!!!!!" << endl;
         shape.setPosition(shape.getPosition().x - (searchDirection.x * SPEED * deltaTime), shape.getPosition().y - (searchDirection.y * SPEED * deltaTime));
         lastDirectionChangeTime = 10.0f;
     }
@@ -103,7 +103,7 @@ bool EnemyFSM::collisionWithWall(Grid& grid)
     int top = enemyBounds.top / 40;
     int bottom = (enemyBounds.top + enemyBounds.height) / 40;
 
-    cout << left << " " << right << " " << top << " " << bottom << endl;
+    //cout << left << " " << right << " " << top << " " << bottom << endl;
 
     if (!grid.getCell(top, left).walkable || !grid.getCell(top, right).walkable ||
         !grid.getCell(bottom, left).walkable || !grid.getCell(bottom, right).walkable) {
