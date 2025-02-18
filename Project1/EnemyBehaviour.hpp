@@ -29,17 +29,19 @@ public:
 
     //void update(Grid& grid, sf::Vector2i target);
 
-    EnemyBehaviour(std::string n, float x, float y, float circleDetect, float circleRange, sf::Vector2i start);
+    EnemyBehaviour(std::string n, float x, float y, float circleDetect, float circleRange, sf::Vector2i start, int hp);
 
     bool detectPlayer(Entity& player);
 
-    void PlayerDetected(Entity& player);
+    void playerDetected(Entity& player);
 
-    void PlayerInRange(Entity& player);
+    void playerInRange(Entity& player);
 
-    void PlayerLowLife();
+    void playerLowLife();
 
-    void patrol(Vector2f ePos, float deltaTime, sf::Vector2f& firstPoint, sf::Vector2f& secondPoint, sf::Vector2f& thirdPoint, sf::Vector2f& fourthPoint) override;
+    void collisionWall(float deltaTime, Grid& grid, Vector2f ePos);
+
+    void patrol(Vector2f ePos, float deltaTime, sf::Vector2f& firstPoint, sf::Vector2f& secondPoint, sf::Vector2f& thirdPoint, sf::Vector2f& fourthPoint, Grid& grid);
 
     void update(float deltaTime, Grid& grid, Entity& player) override;
 

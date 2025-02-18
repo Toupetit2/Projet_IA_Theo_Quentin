@@ -1,6 +1,6 @@
 #include "EnemyBehaviour.hpp"
 
-EnemyBehaviour::EnemyBehaviour(std::string n, float x, float y, float circleDetect, float circleRange, sf::Vector2i start) : Enemy(x, y) {
+EnemyBehaviour::EnemyBehaviour(std::string n, float x, float y, float circleDetect, float circleRange, sf::Vector2i start, int hp) : Enemy(x, y, hp) {
     shape.setPosition(x, y);
     CircleDetect.setRadius(circleDetect);
     CircleDetect.setPosition(x, y);
@@ -22,19 +22,57 @@ bool EnemyBehaviour::detectPlayer(Entity& player) {
     return (distance < CircleDetect.getRadius());
 }
 
-void EnemyBehaviour::PlayerDetected(Entity& player)
+void EnemyBehaviour::playerDetected(Entity& player)
 {
     shape.setFillColor(sf::Color::Green);
     blackboard.SetValue("PlayerDetected", 1);
     currentState = CHASE;
 }
 
-void EnemyBehaviour::PlayerLowLife()
+void EnemyBehaviour::playerInRange(Entity& player)
+{
+    if (player.shape.getGlobalBounds().intersects(CircleRange.getGlobalBounds()) && player.shape.getGlobalBounds().intersects(CircleDetect.getGlobalBounds())) {
+        shape.setFillColor(sf::Color::Blue);
+        blackboard.SetValue("PlayerInRange", 1);
+        blackboard.SetValue("PlayerDetected", 0);
+        //currentState = ATTACK;
+    }
+    else {
+        blackboard.SetValue("PlayerInRange", 0);
+        shape.setFillColor(sf::Color::Red);
+    }
+}
+
+void EnemyBehaviour::playerLowLife()
 {
 
 }
 
-void EnemyBehaviour::patrol(Vector2f ePos, float deltaTime, sf::Vector2f& firstPoint, sf::Vector2f& secondPoint, sf::Vector2f& thirdPoint, sf::Vector2f& fourthPoint)
+void EnemyBehaviour::collisionWall(float deltaTime, Grid& grid, Vector2f ePos)
+{
+    //sf::Vector2f movement(0.f, 0.f);
+    //if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z)) movement.y -= SPEED * deltaTime;
+    //if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) movement.y += SPEED * deltaTime;
+    //if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) movement.x -= SPEED * deltaTime;
+    //if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) movement.x += SPEED * deltaTime;
+
+    sf::Vector2f newPosition = shape.getPosition();
+    sf::FloatRect newBounds(newPosition, shape.getSize());
+
+    auto isWalkable = [&](float x, float y) {
+        int gridX = static_cast<int>(x / CELL_SIZE);
+        int gridY = static_cast<int>(y / CELL_SIZE);
+        return gridX >= 0 && gridX < GRID_WIDTH && gridY >= 0 && gridY < GRID_HEIGHT && grid.getCell(gridX, gridY).walkable;
+        };
+
+    if (isWalkable(newBounds.left - 1, newBounds.top - 1) &&
+        isWalkable(newBounds.left + newBounds.width + 1, newBounds.top - 1) &&
+        isWalkable(newBounds.left - 1, newBounds.top + newBounds.height + 1) &&
+        isWalkable(newBounds.left + newBounds.width + 1, newBounds.top + newBounds.height + 1)) {
+    }
+}
+
+void EnemyBehaviour::patrol(Vector2f ePos, float deltaTime, sf::Vector2f& firstPoint, sf::Vector2f& secondPoint, sf::Vector2f& thirdPoint, sf::Vector2f& fourthPoint, Grid& grid)
 {
     static int currentWaypoint = 0;
     static sf::Vector2f waypoints[4] = { sf::Vector2f(firstPoint), sf::Vector2f(secondPoint), sf::Vector2f(thirdPoint), sf::Vector2f(fourthPoint) };
@@ -49,21 +87,8 @@ void EnemyBehaviour::patrol(Vector2f ePos, float deltaTime, sf::Vector2f& firstP
         direction /= distance;
         ePos += direction * deltaTime * SPEED;
     }
+    //collisionWall(deltaTime, grid, ePos);
     shape.setPosition(ePos);
-}
-
-void EnemyBehaviour::PlayerInRange(Entity& player)
-{
-    if (player.shape.getGlobalBounds().intersects(CircleRange.getGlobalBounds()) && player.shape.getGlobalBounds().intersects(CircleDetect.getGlobalBounds())) {
-        shape.setFillColor(sf::Color::Blue);
-        blackboard.SetValue("PlayerInRange", 1);
-        blackboard.SetValue("PlayerDetected", 0);
-        //currentState = ATTACK;
-    }
-    else {
-        blackboard.SetValue("PlayerInRange", 0);
-        shape.setFillColor(sf::Color::Red);
-    }
 }
 
 void EnemyBehaviour::update(float deltaTime, Grid& grid, Entity& player)
@@ -101,9 +126,9 @@ void EnemyBehaviour::update(float deltaTime, Grid& grid, Entity& player)
         blackboard.SetValue("LowLife", 0);
 
         if (detectPlayer(player)) {
-            PlayerDetected(player);
+            playerDetected(player);
         }
-        patrol(shape.getPosition(), deltaTime, firstPosition, secondPosition, thridPosition, fourthPosition);
+        patrol(shape.getPosition(), deltaTime, firstPosition, secondPosition, thridPosition, fourthPosition, grid);
         break;
     
     case CHASE:
@@ -118,7 +143,7 @@ void EnemyBehaviour::update(float deltaTime, Grid& grid, Entity& player)
             currentState = PATROL;
         }
         chase(player.shape.getPosition(), deltaTime, grid);
-        PlayerInRange(player);
+        playerInRange(player);
         break;
 
     case SEARCH:

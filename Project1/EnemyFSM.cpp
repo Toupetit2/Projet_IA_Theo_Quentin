@@ -1,7 +1,7 @@
 #include "EnemyFSM.hpp"
 #include "Pathfinding.hpp"
 
-EnemyFSM::EnemyFSM(float x, float y) : Enemy(x, y) {}
+EnemyFSM::EnemyFSM(float x, float y, int hp) : Enemy(x, y, hp) {}
 
 void EnemyFSM::update(float deltaTime, Grid& grid, Entity& player)
 {

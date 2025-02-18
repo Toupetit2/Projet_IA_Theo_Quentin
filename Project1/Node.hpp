@@ -1,4 +1,6 @@
-#pragma once
+#ifndef NODE_H
+#define NODE_H
+
 #include <SFML/System/Vector2.hpp>
 
 struct Node {
@@ -9,3 +11,5 @@ struct Node {
     Node(sf::Vector2i pos);
     void calculateCosts(Node* end, int newG);
 };
+
+#endif
