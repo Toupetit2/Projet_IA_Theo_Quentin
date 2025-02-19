@@ -4,7 +4,7 @@
 
 EnemyFSM::EnemyFSM(float x, float y, int hp) : Enemy(x, y, hp) {
     CirclePoint.setRadius(20.f);
-    CirclePoint.setFillColor(sf::Color::Yellow);
+    CirclePoint.setFillColor(sf::Color::Magenta);
 }
 
 void EnemyFSM::update(float deltaTime, Grid& grid, Entity& player)
