@@ -21,18 +21,18 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Jeu SFML - IA Ennemis");
     window.setFramerateLimit(60);
 
-    Player player(200, 200);
+    Player player(600, 200, 100); // x, y, hp
     std::vector<shared_ptr<Enemy>> vectorEnemy;
-    shared_ptr<EnemyFSM> enemy1 = make_shared<EnemyFSM>(EnemyFSM(100, 100));
+    shared_ptr<EnemyFSM> enemy1 = make_shared<EnemyFSM>(EnemyFSM(7 * 40, 100, 50)); // x, y, hp
     vectorEnemy.push_back(enemy1);
     //enemy1 = make_shared<EnemyFSM>(EnemyFSM(700, 100));
     //vectorEnemy.push_back(enemy1);
 
-    //shared_ptr<EnemyBehaviour> enemy_B1 = make_shared<EnemyBehaviour>("Fred", 100, 300, 200.f, 50.f, start); //std::string n, float x, float y, float circleDetect, float circleRange, sf::Vector2i start
-    //vectorEnemyBehaviour.push_back(enemy_B1);
+    shared_ptr<EnemyBehaviour> enemy_B1 = make_shared<EnemyBehaviour>("Fred", 100, 300, 200.f, 50.f, start, 100); //std::string n, float x, float y, float circleDetect, float circleRange, sf::Vector2i start, int hp
+    vectorEnemyBehaviour.push_back(enemy_B1);
     
     Grid grid;
-    grid.loadFromFile("map.txt");
+    grid.loadFromFile("map2.txt");
 
     sf::Clock clock;
 
@@ -53,7 +53,6 @@ int main() {
             if (fsm) {
                 fsm->update(deltaTime, grid, player);
             }
-
         }
 
         window.clear();
@@ -61,12 +60,14 @@ int main() {
         grid.draw(window);
         window.draw(player.shape);
 
-        for (const auto& enemy : vectorEnemy)
+        for (const auto& enemy : vectorEnemy) {
             window.draw(enemy->shape);
+        }
+        enemy1->draw(window);
 
-        //enemy_B1->PlayerInRange(player);
-        //enemy_B1->update(deltaTime, grid, player);
-        //enemy_B1->draw(window);
+        enemy_B1->playerInRange(player);
+        enemy_B1->update(deltaTime, grid, player);
+        enemy_B1->draw(window);
 
         window.display();
     }

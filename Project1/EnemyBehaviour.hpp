@@ -7,14 +7,32 @@
 
 class EnemyBehaviour : public Enemy {
 protected : 
-    Blackboard blackboard;
+    // constructor
     sf::CircleShape CircleDetect;
     sf::CircleShape CircleRange;
+
+    // other
+    Blackboard blackboard;
     std::vector<sf::Vector2i> path;
     int pathIndex;
     sf::Clock moveClock;
     bool needsRepath;
+
+    // patrol
+    int waypointCount = 0;
+    sf::CircleShape CirclePoint;
+    sf::Vector2f firstPosition{ 2 * 40, 8 * 40 };
+    sf::Vector2f secondPosition{ 7 * 40, 9 * 40 };
+    sf::Vector2f thridPosition{ 7 * 40, 12 * 40 };
+    sf::Vector2f fourthPosition{ 10 * 40, 11 * 40 };
+
+    // search
+    float timeSinceSearchStarted = 0.f;
+    float lastDirectionChangeTime = 0.f;
+    Vector2f searchDirection;
+    float searchRange = 100;
     sf::Vector2f lastPlayerPosition;
+    float searchTime = 5.f;
 
 public:
 
@@ -24,15 +42,21 @@ public:
 
     //void update(Grid& grid, sf::Vector2i target);
 
-    EnemyBehaviour(std::string n, float x, float y, float circleDetect, float circleRange, sf::Vector2i start);
+    EnemyBehaviour(std::string n, float x, float y, float circleDetect, float circleRange, sf::Vector2i start, int hp);
 
     bool detectPlayer(Entity& player);
 
-    void PlayerDetected(Entity& player);
+    void playerDetected(Entity& player);
 
-    void PlayerInRange(Entity& player);
+    void playerInRange(Entity& player);
 
-    void PlayerLowLife();
+    void playerLost();
+
+    void patrol(Vector2f ePos, float deltaTime, sf::Vector2f& firstPoint, sf::Vector2f& secondPoint, sf::Vector2f& thirdPoint, sf::Vector2f& fourthPoint, Grid& grid) override;
+
+    void search(float deltaTime, Grid& grid, Entity& player);
+
+    bool collisionWithWall(Grid& grid);
 
     void update(float deltaTime, Grid& grid, Entity& player) override;
 

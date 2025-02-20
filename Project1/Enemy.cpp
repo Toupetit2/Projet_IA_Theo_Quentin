@@ -1,16 +1,14 @@
 #include "Enemy.hpp"
 #include <cmath>
 
-Enemy::Enemy(float x, float y) : Entity(x, y, sf::Color::Red) {}
+Enemy::Enemy(float x, float y, int hp) : Entity(x, y, sf::Color::Red, hp) {}
+
 void Enemy::update(float deltaTime, Grid& grid, Entity& player) {}
 
-
 void Enemy::chase(Vector2f pPos, float deltaTime, Grid& grid)
-
 {
     Pathfinding2 pathfinding;
     vector<Vector2i> path = pathfinding.findPath(grid, Vector2i(shape.getPosition().x/40, shape.getPosition().y / 40), Vector2i(pPos.x/40, pPos.y/40));
-    cout << path.size() << endl;
     if (path.size() > 1) { // On se rapproche seulement si on est � plus de 5 pixels
         sf::Vector2f direction = Vector2f(path[1]*40) - shape.getPosition();
         float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
@@ -19,11 +17,10 @@ void Enemy::chase(Vector2f pPos, float deltaTime, Grid& grid)
     }
 }
 
-void Enemy::patrol(Vector2f ePos, float deltaTime)
-
+void Enemy::patrol(Vector2f ePos, float deltaTime, sf::Vector2f& firstPoint, sf::Vector2f& secondPoint, sf::Vector2f& thirdPoint, sf::Vector2f& fourthPoint, Grid& grid)
 {
     static int currentWaypoint = 0;
-    static sf::Vector2f waypoints[4] = { sf::Vector2f(300, 150), sf::Vector2f(500, 500), sf::Vector2f(150, 300), sf::Vector2f(500, 300) };
+    static sf::Vector2f waypoints[4] = { sf::Vector2f(firstPoint), sf::Vector2f(secondPoint), sf::Vector2f(thirdPoint), sf::Vector2f(fourthPoint) };
     sf::Vector2f target = waypoints[currentWaypoint];
     sf::Vector2f direction = target - ePos;
     float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
@@ -33,6 +30,7 @@ void Enemy::patrol(Vector2f ePos, float deltaTime)
     }
     else {
         direction /= distance;
+
         ePos += direction * SPEED * deltaTime;
     }
     shape.setPosition(ePos);

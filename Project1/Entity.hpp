@@ -13,10 +13,12 @@ class Entity {
 public:
     RectangleShape shape;
     Vector2f velocity;
+    int health;
 
-    Entity(float x, float y, sf::Color color);
-
-    virtual void update(float deltaTime, Grid& grid, Entity& player) = 0;
+    Entity(float x, float y, sf::Color color, int hp);
+    virtual void update(float deltaTime, Grid& grid, Entity& entity) = 0;
+    bool isAlive() const;
+    void takeDamage(int damage);
 
 };
 
