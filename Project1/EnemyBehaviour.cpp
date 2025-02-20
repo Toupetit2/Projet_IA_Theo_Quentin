@@ -123,7 +123,7 @@ void EnemyBehaviour::patrol(Vector2f ePos, float deltaTime, sf::Vector2f& firstP
     CirclePoint.setPosition(waypoints[waypointCount]);
 }
 
-void EnemyBehaviour::search(float deltaTime, Grid& grid)
+void EnemyBehaviour::search(float deltaTime, Grid& grid, Entity& player)
 {
     Vector2f movement = Vector2f(0.f, 0.f);
     float distanceBefore = std::sqrt((lastPlayerPosition.x - shape.getPosition().x) * (lastPlayerPosition.x - shape.getPosition().x) + (lastPlayerPosition.y - shape.getPosition().y) * (lastPlayerPosition.y - shape.getPosition().y));
@@ -132,7 +132,6 @@ void EnemyBehaviour::search(float deltaTime, Grid& grid)
         searchDirection = sf::Vector2f(rand() % 2 == 0 ? -1 : 1, rand() % 2 == 0 ? -1 : 1);
         searchDirection /= std::sqrt(searchDirection.x * searchDirection.x + searchDirection.y * searchDirection.y);
         lastDirectionChangeTime = 0;
-
     }
 
     timeSinceSearchStarted += deltaTime;
@@ -143,6 +142,12 @@ void EnemyBehaviour::search(float deltaTime, Grid& grid)
     else {
         timeSinceSearchStarted = 0.0f;
         currentState = PATROL;
+    }
+
+    if (detectPlayer(player)) {
+        currentState = CHASE;
+        timeSinceSearchStarted = 0.0f;
+        lastDirectionChangeTime = 0;
     }
 
     float distanceAfter = std::sqrt((lastPlayerPosition.x - shape.getPosition().x) * (lastPlayerPosition.x - shape.getPosition().x) + (lastPlayerPosition.y - shape.getPosition().y) * (lastPlayerPosition.y - shape.getPosition().y));
@@ -256,10 +261,10 @@ void EnemyBehaviour::update(float deltaTime, Grid& grid, Entity& player)
         if (!detectPlayer(player))
         {
             lastPlayerPosition = player.shape.getPosition();
-            currentState = SEARCH;
+            //currentState = SEARCH;
         }
         shape.setFillColor(sf::Color::Green);
-        search(deltaTime, grid);
+        search(deltaTime, grid, player);
         break;
     }
 

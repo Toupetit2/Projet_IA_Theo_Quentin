@@ -30,7 +30,7 @@ void EnemyFSM::update(float deltaTime, Grid& grid, Entity& player)
         break;
 
     case SEARCH:
-        search(lastPlayerPos, deltaTime, grid);
+        search(lastPlayerPos, deltaTime, grid, player);
         break;
     }
     
@@ -67,7 +67,7 @@ bool EnemyFSM::detectPlayer(Vector2f pPos)
 }
 
 
-void EnemyFSM::search(Vector2f lastPlayerPosition, float deltaTime, Grid& grid)
+void EnemyFSM::search(Vector2f lastPlayerPosition, float deltaTime, Grid& grid, Entity& player)
 {
     Vector2f movement = Vector2f(0.f, 0.f);
     float distanceBefore = std::sqrt((lastPlayerPos.x - shape.getPosition().x) * (lastPlayerPos.x - shape.getPosition().x) + (lastPlayerPos.y - shape.getPosition().y) * (lastPlayerPos.y - shape.getPosition().y));
@@ -87,6 +87,12 @@ void EnemyFSM::search(Vector2f lastPlayerPosition, float deltaTime, Grid& grid)
     else {
         timeSinceSearchStarted = 0.0f;
         currentState = PATROL;
+    }
+
+    if (detectPlayer(player.shape.getPosition())) {
+        currentState = CHASE;
+        timeSinceSearchStarted = 0.0f;
+        lastDirectionChangeTime = 0;
     }
 
     float distanceAfter = std::sqrt((lastPlayerPos.x - shape.getPosition().x) * (lastPlayerPos.x - shape.getPosition().x) + (lastPlayerPos.y - shape.getPosition().y) * (lastPlayerPos.y - shape.getPosition().y));

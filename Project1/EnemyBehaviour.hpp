@@ -54,7 +54,7 @@ public:
 
     void patrol(Vector2f ePos, float deltaTime, sf::Vector2f& firstPoint, sf::Vector2f& secondPoint, sf::Vector2f& thirdPoint, sf::Vector2f& fourthPoint, Grid& grid) override;
 
-    void search(float deltaTime, Grid& grid);
+    void search(float deltaTime, Grid& grid, Entity& player);
 
     bool collisionWithWall(Grid& grid);
 
