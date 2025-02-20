@@ -3,13 +3,11 @@
 #include "time.h"
 
 EnemyFSM::EnemyFSM(float x, float y, int hp) : Enemy(x, y, hp) {
-    CirclePoint.setRadius(20.f);
-    CirclePoint.setFillColor(sf::Color::Magenta);
+
 }
 
 void EnemyFSM::update(float deltaTime, Grid& grid, Entity& player)
 {
-    cout << endl;
     switch (currentState) {
     case PATROL:
         patrol(shape.getPosition(), deltaTime, firstPosition, secondPosition, thridPosition, fourthPosition, grid);
@@ -35,7 +33,7 @@ void EnemyFSM::update(float deltaTime, Grid& grid, Entity& player)
         break;
     }
     
-    if (lastState != currentState)
+    /*if (lastState != currentState)
     {
         lastState = currentState;
         if (lastState == PATROL)
@@ -57,7 +55,7 @@ void EnemyFSM::update(float deltaTime, Grid& grid, Entity& player)
         {
             cout << "ERROR - UNKNOWN STATE" << endl;
         }
-    }
+    }*/
 }
 
 bool EnemyFSM::detectPlayer(Vector2f pPos)
@@ -111,11 +109,6 @@ void EnemyFSM::search(Vector2f lastPlayerPosition, float deltaTime, Grid& grid, 
     }
 }
 
-void EnemyFSM::draw(sf::RenderWindow& window)
-{
-    window.draw(CirclePoint);
-}
-
 bool EnemyFSM::collisionWithWall(Grid& grid)
 {
     int left = shape.getPosition().x / 40;
@@ -164,7 +157,6 @@ void EnemyFSM::patrol(Vector2f ePos, float deltaTime, sf::Vector2f& firstPoint, 
     if ((shape.getPosition().x) / 40 < (waypoints[waypointCount].x + 40) / 40 && (shape.getPosition().x) / 40 > (waypoints[waypointCount].x - 40) / 40
         && (shape.getPosition().y) / 40 < (waypoints[waypointCount].y + 40) / 40 && (shape.getPosition().y) / 40 > (waypoints[waypointCount].y - 40) / 40) {
         waypointCount += 1;
-        cout << "numero de point : " << waypointCount << endl;
         if (waypointCount > 3) {
             waypointCount = 0;
         }
@@ -176,6 +168,5 @@ void EnemyFSM::patrol(Vector2f ePos, float deltaTime, sf::Vector2f& firstPoint, 
         float angle = std::atan2(direction.y, direction.x); // Angle en radians
         shape.setPosition(shape.getPosition().x + (std::cos(angle) * SPEED * deltaTime), shape.getPosition().y + std::sin(angle) * SPEED * deltaTime);
     }
-    CirclePoint.setPosition(waypoints[waypointCount]);
 }
 

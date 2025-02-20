@@ -63,7 +63,6 @@ int main() {
         for (const auto& enemy : vectorEnemy) {
             window.draw(enemy->shape);
         }
-        enemy1->draw(window);
 
         enemy_B1->playerInRange(player);
         enemy_B1->update(deltaTime, grid, player);

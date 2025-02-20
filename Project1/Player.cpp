@@ -1,7 +1,7 @@
 #include "Player.hpp"
 #include <SFML/Window/Keyboard.hpp>
 
-Player::Player(float x, float y, int hp) : Entity(x, y, sf::Color::Yellow, hp), attackTimer(0.f) {}
+Player::Player(float x, float y, int hp) : Entity(x, y, sf::Color::Blue, hp), attackTimer(0.f) {}
 
 void Player::update(float deltaTime, Grid& grid, Entity& enemy) {
     sf::Vector2f movement(0.f, 0.f);

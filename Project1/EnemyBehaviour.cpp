@@ -220,7 +220,6 @@ void EnemyBehaviour::update(float deltaTime, Grid& grid, Entity& player)
 
     switch (currentState) {
     case PATROL:
-        std::cout << "en patrouille" << std::endl;
         SPEED = 100.f;
         blackboard.SetValue("PlayerDetected", 0);
         blackboard.SetValue("PlayerInRange", 0);
@@ -230,13 +229,12 @@ void EnemyBehaviour::update(float deltaTime, Grid& grid, Entity& player)
             playerDetected(player);
         }
         else {
-            shape.setFillColor(sf::Color::Blue);
+            //shape.setFillColor(sf::Color::Blue);
         }
         patrol(shape.getPosition(), deltaTime, firstPosition, secondPosition, thridPosition, fourthPosition, grid);
         break;
     
     case CHASE:
-        std::cout << "en chasse" << std::endl;
         SPEED = 130.f;
         blackboard.SetValue("PlayerInRange", 0);
         blackboard.SetValue("PlayerLost", 0);
@@ -247,12 +245,11 @@ void EnemyBehaviour::update(float deltaTime, Grid& grid, Entity& player)
             playerLost();
         }
         chase(player.shape.getPosition(), deltaTime, grid);
-        shape.setFillColor(sf::Color::Red);
+        //shape.setFillColor(sf::Color::Red);
         playerInRange(player);
         break;
 
     case SEARCH:
-        std::cout << "en recherche" << std::endl;
         SPEED = 100.f;
         blackboard.SetValue("PlayerDetected", 0);
         blackboard.SetValue("PlayerInRange", 0);
@@ -263,19 +260,19 @@ void EnemyBehaviour::update(float deltaTime, Grid& grid, Entity& player)
             lastPlayerPosition = player.shape.getPosition();
             //currentState = SEARCH;
         }
-        shape.setFillColor(sf::Color::Green);
+        //shape.setFillColor(sf::Color::Green);
         search(deltaTime, grid, player);
         break;
     }
 
-    CircleDetect.setPosition(shape.getPosition());
-    CircleRange.setPosition(shape.getPosition());
+    //CircleDetect.setPosition(shape.getPosition());
+    //CircleRange.setPosition(shape.getPosition());
 }
 
 void EnemyBehaviour::draw(sf::RenderWindow& window)
 {
-    window.draw(CircleDetect);
-    window.draw(CircleRange);
+    //window.draw(CircleDetect);
+    //window.draw(CircleRange);
     window.draw(shape);
-    window.draw(CirclePoint);
+    //window.draw(CirclePoint);
 }

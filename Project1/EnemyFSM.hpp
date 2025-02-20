@@ -29,10 +29,6 @@ private:
 	sf::Vector2f thridPosition{ 12 * 40, 6 * 40 };
 	sf::Vector2f fourthPosition{ 5 * 40, 4 * 40 };
 
-	//patrol map4
-
-	sf::CircleShape CirclePoint;
-
 	//debug
 	State lastState = SEARCH;
 public:
