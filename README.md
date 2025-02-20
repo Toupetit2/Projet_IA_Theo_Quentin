@@ -5,13 +5,16 @@
 ## Introduction
 
 
+
 Dans un contexte d'apprentissage, nous avons eu comme consignes de créer plusieurs IA avec des systèmes comportementaux différents.
 
 L'intelligence artificielle dans les jeux vidéo désigne l’ensemble des techniques permettant de simuler un comportement intelligent pour des entités contrôlées par la machine. 
 Il peut s’agir d’ennemis, d’alliés, de créatures, de foules, ou même de systèmes générant du contenu procédural.
 
 
+
 ## Contexte du projet 
+
 
 
 Ce projet vise à enrichir un jeu existant développé en C++ avec SFML en améliorant le comportement des ennemis à travers l'implémentation 
@@ -23,7 +26,9 @@ et le Goal-Oriented Action Planning (GOAP).
 Le projet permettra d'approfondir la compréhension des systèmes d'IA appliqués aux jeux vidéo et de développer des compétences avancées en C++.
 
 
+
 ## Objectifs du projet 
+
 
 
 - Comprendre les différentes approches de l'IA appliquées aux
@@ -38,6 +43,19 @@ objet.
 ° Pathfinding A*
 ° Behavior Tree
 ° Goal-Oriented Action Planning
+
+
+
+## Commande du projet
+
+
+
+Z, déplacement vers le haut
+Q, déplacement vers la gauche
+S, déplacement vers le bas
+D, déplacement vers la droite
+
+Clic gauche, attaquer (aucun systeme d'attaque n'a été initialisé donc vous ne pouvez rien faire aux ennemies)
 
 
 
