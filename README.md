@@ -46,7 +46,7 @@ objet.
 
 
 
-## Commande du projet
+## Commandes du projet
 
 
 
