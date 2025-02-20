@@ -2,20 +2,23 @@
 
 EnemyBehaviour::EnemyBehaviour(std::string n, float x, float y, float circleDetect, float circleRange, sf::Vector2i start, int hp) : Enemy(x, y, hp) {
     shape.setPosition(x, y);
-    CircleDetect.setRadius(circleDetect);
-    CircleDetect.setPosition(x, y);
-    CircleDetect.setOrigin(180, 170);
-    CircleDetect.setFillColor(sf::Color(0, 255, 0, 50));
-    CircleRange.setRadius(circleRange);
-    CircleRange.setPosition(x, y);
-    CircleRange.setOrigin(30, 30);
-    CircleRange.setFillColor(sf::Color(0, 0, 255, 50));
+    //CircleDetect.setRadius(circleDetect);
+    //CircleDetect.setPosition(x, y);
+    //CircleDetect.setOrigin(180, 170);
+    //CircleDetect.setFillColor(sf::Color(0, 255, 0, 50));
+    //CircleRange.setRadius(circleRange);
+    //CircleRange.setPosition(x, y);
+    //CircleRange.setOrigin(30, 30);
+    //CircleRange.setFillColor(sf::Color(0, 0, 255, 50));
     blackboard.SetValue("PlayerDetected", 0);
     blackboard.SetValue("PlayerInRange", 0); // ajout de nouvelles valeurs qui vont servir pour les conditions
     blackboard.SetValue("PlayerLost", 0);
-    CirclePoint.setRadius(20.f);
-    CirclePoint.setFillColor(sf::Color::Magenta);
+    //CirclePoint.setRadius(20.f);
+    //CirclePoint.setFillColor(sf::Color::Magenta);
     currentState = PATROL;
+    shape.setFillColor(sf::Color::Red);
+    shape.setOutlineThickness(3.f);
+    shape.setOutlineColor(sf::Color::Green);
 }
 
 bool EnemyBehaviour::detectPlayer(Entity& player) {
@@ -28,7 +31,6 @@ void EnemyBehaviour::playerDetected(Entity& player)
 {
     blackboard.SetValue("PlayerDetected", 1);
     currentState = CHASE;
-    shape.setFillColor(sf::Color::Red);
 }
 
 void EnemyBehaviour::playerInRange(Entity& player)
@@ -36,7 +38,7 @@ void EnemyBehaviour::playerInRange(Entity& player)
     if (player.shape.getGlobalBounds().intersects(CircleRange.getGlobalBounds()) && player.shape.getGlobalBounds().intersects(CircleDetect.getGlobalBounds())) {
         blackboard.SetValue("PlayerInRange", 1);
         blackboard.SetValue("PlayerDetected", 0);
-        shape.setFillColor(sf::Color::White);
+        //shape.setFillColor(sf::Color::White);
         //currentState = ATTACK;
     }
     else {
