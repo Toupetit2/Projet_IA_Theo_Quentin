@@ -3,7 +3,8 @@
 #include "time.h"
 
 EnemyFSM::EnemyFSM(float x, float y, int hp) : Enemy(x, y, hp) {
-
+    shape.setOutlineColor(Color::Yellow);
+    shape.setOutlineThickness(3.f);
 }
 
 void EnemyFSM::update(float deltaTime, Grid& grid, Entity& player)
