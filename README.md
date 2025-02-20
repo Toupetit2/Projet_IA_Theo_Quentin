@@ -1,6 +1,9 @@
 # Projet IA Theo et Quentin
 
+
+
 ## Introduction
+
 
 Dans un contexte d'apprentissage, nous avons eu comme consignes de créer plusieurs IA avec des systèmes comportementaux différents.
 
@@ -9,6 +12,7 @@ Il peut s’agir d’ennemis, d’alliés, de créatures, de foules, ou même de
 
 
 ## Contexte du projet 
+
 
 Ce projet vise à enrichir un jeu existant développé en C++ avec SFML en améliorant le comportement des ennemis à travers l'implémentation 
 de différentes techniques d'intelligence artificielle.
@@ -20,6 +24,7 @@ Le projet permettra d'approfondir la compréhension des systèmes d'IA appliqué
 
 
 ## Objectifs du projet 
+
 
 - Comprendre les différentes approches de l'IA appliquées aux
 jeux vidéo.
@@ -35,9 +40,13 @@ objet.
 ° Goal-Oriented Action Planning
 
 
+
 ## Spécificités techniques
 
+
+
 ### Technologies utilisées
+
 
 ● Langage : C++ (norme C++17 ou supérieure
 recommandée).
@@ -48,7 +57,9 @@ Multimedia Library).
 ● Outils recommandés : GitHub pour le versioning, Valgrind
 pour le debug.
 
+
 ### Contraintes de développement
+
 
 #### Organisation du Code
 
@@ -82,7 +93,10 @@ déclarations.
 ● (optionnel) Implémentation du multithreading pour
 optimiser certaines tâches.
 
+
+
 ## Objectifs pédagogiques et professionnels du projet
+
 
 
 ### Savoir
@@ -91,7 +105,9 @@ optimiser certaines tâches.
 jeux vidéo.
 ● Connaissance des algorithmes de pathfinding (A*), FSM,
 
+
 ### Behaviour Trees et GOAP.
+
 
 ● Compréhension des bonnes pratiques de programmation
 en C++.
@@ -105,7 +121,9 @@ ennemis.
 les comportements des ennemis.
 ● Débogage et tests rigoureux des implémentations IA.
 
+
 ### Savoir-être
+
 
 ● Capacité à travailler en équipe et à collaborer sur un projet
 commun.
@@ -115,5 +133,7 @@ commun.
 rencontrées.
 ● Communication efficace et documentation claire du travail
 réalisé.
+
+
 
 ## Merci d'avoir pris le temps de lire ce read me :)
