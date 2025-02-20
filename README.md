@@ -50,10 +50,10 @@ objet.
 
 
 
-Z, déplacement vers le haut
-Q, déplacement vers la gauche
-S, déplacement vers le bas
-D, déplacement vers la droite
+Z : déplacement vers le haut,
+Q : déplacement vers la gauche,
+S : déplacement vers le bas,
+D : déplacement vers la droite,
 
 Clic gauche, attaquer (aucun systeme d'attaque n'a été initialisé donc vous ne pouvez rien faire aux ennemies)
 
