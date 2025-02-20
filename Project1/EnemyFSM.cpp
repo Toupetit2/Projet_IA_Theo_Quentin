@@ -1,5 +1,5 @@
 #include "EnemyFSM.hpp"
-#include "Pathfinding.hpp"
+#include "Pathfinding2.hpp"
 #include "time.h"
 
 EnemyFSM::EnemyFSM(float x, float y, int hp) : Enemy(x, y, hp) {
@@ -9,6 +9,7 @@ EnemyFSM::EnemyFSM(float x, float y, int hp) : Enemy(x, y, hp) {
 
 void EnemyFSM::update(float deltaTime, Grid& grid, Entity& player)
 {
+    cout << endl;
     switch (currentState) {
     case PATROL:
         patrol(shape.getPosition(), deltaTime, firstPosition, secondPosition, thridPosition, fourthPosition, grid);
@@ -157,7 +158,7 @@ void EnemyFSM::patrol(Vector2f ePos, float deltaTime, sf::Vector2f& firstPoint, 
         ePos += direction * deltaTime * SPEED;
     }
 
-    Pathfinding pathfinding;
+    Pathfinding2 pathfinding;
     vector<Vector2i> path = pathfinding.findPath(grid, Vector2i(shape.getPosition().x / 40, shape.getPosition().y / 40), Vector2i(waypoints[waypointCount].x / 40, waypoints[waypointCount].y / 40));
 
     if ((shape.getPosition().x) / 40 < (waypoints[waypointCount].x + 40) / 40 && (shape.getPosition().x) / 40 > (waypoints[waypointCount].x - 40) / 40
