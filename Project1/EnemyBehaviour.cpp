@@ -102,7 +102,7 @@ void EnemyBehaviour::patrol(Vector2f ePos, float deltaTime, sf::Vector2f& firstP
         ePos += direction * deltaTime * SPEED;
     }
 
-    Pathfinding2 pathfinding;
+    Pathfinding pathfinding;
     vector<Vector2i> path = pathfinding.findPath(grid, Vector2i(shape.getPosition().x / 40, shape.getPosition().y / 40), Vector2i(waypoints[waypointCount].x / 40, waypoints[waypointCount].y / 40));
 
     if ((shape.getPosition().x) / 40 < (waypoints[waypointCount].x + 50) / 40 && (shape.getPosition().x) / 40 > (waypoints[waypointCount].x - 50) / 40 

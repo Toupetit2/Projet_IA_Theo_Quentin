@@ -1,6 +1,7 @@
 #ifndef ENEMY_HPP
 #define ENEMY_HPP
 #include "Pathfinding2.hpp"
+#include "Pathfinding.hpp"
 #include "Entity.hpp"
 
 class Enemy : public Entity {

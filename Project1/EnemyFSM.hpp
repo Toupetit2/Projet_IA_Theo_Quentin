@@ -23,11 +23,13 @@ private:
 	int currentTargetID = 0;
 
 	int waypointCount = 0;
-
+	// patrol map2
 	sf::Vector2f firstPosition{ 7 * 40, 3 * 40 };
 	sf::Vector2f secondPosition{ 12 * 40, 3 * 40 };
 	sf::Vector2f thridPosition{ 12 * 40, 6 * 40 };
 	sf::Vector2f fourthPosition{ 5 * 40, 4 * 40 };
+
+	//patrol map4
 
 	sf::CircleShape CirclePoint;
 

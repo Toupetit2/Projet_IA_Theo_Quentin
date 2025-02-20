@@ -4,6 +4,7 @@
 #include "ConditionNode.hpp"
 #include "SequenceNode.hpp"
 #include "SelectorNode.hpp"
+#include "Pathfinding.hpp"
 
 class EnemyBehaviour : public Enemy {
 protected : 
@@ -21,10 +22,18 @@ protected :
     // patrol
     int waypointCount = 0;
     sf::CircleShape CirclePoint;
+
+    //patrol map2
     sf::Vector2f firstPosition{ 2 * 40, 8 * 40 };
     sf::Vector2f secondPosition{ 7 * 40, 9 * 40 };
     sf::Vector2f thridPosition{ 7 * 40, 12 * 40 };
     sf::Vector2f fourthPosition{ 10 * 40, 11 * 40 };
+
+    // patrol map4
+    //sf::Vector2f firstPosition{ 2 * 40, 8 * 40 };
+    //sf::Vector2f secondPosition{ 7 * 40, 9 * 40 };
+    //sf::Vector2f thridPosition{ 10 * 40, 10 * 40 };
+    //sf::Vector2f fourthPosition{ 15 * 40, 11 * 40 };
 
     // search
     float timeSinceSearchStarted = 0.f;
