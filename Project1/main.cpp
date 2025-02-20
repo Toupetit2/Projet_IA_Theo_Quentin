@@ -20,7 +20,7 @@ sf::Vector2i start(100, 500);
 int main() {
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Jeu SFML - IA Ennemis");
     window.setFramerateLimit(60);
-
+    cout << "FSM made by Theo (Yellow enemy), Behaviour made by Quentin (Green enemy)" << endl << endl;
     Player player(600, 200, 100); // x, y, hp
     std::vector<shared_ptr<Enemy>> vectorEnemy;
     shared_ptr<EnemyFSM> enemy1 = make_shared<EnemyFSM>(EnemyFSM(7 * 40, 100, 50)); // x, y, hp
