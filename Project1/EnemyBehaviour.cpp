@@ -274,8 +274,8 @@ void EnemyBehaviour::update(float deltaTime, Grid& grid, Entity& player)
 
 void EnemyBehaviour::draw(sf::RenderWindow& window)
 {
-    //window.draw(CircleDetect);
-    //window.draw(CircleRange);
+    window.draw(CircleDetect);
+    window.draw(CircleRange);
     window.draw(shape);
-    //window.draw(CirclePoint);
+    window.draw(CirclePoint);
 }
