@@ -23,11 +23,18 @@ private:
 	int currentTargetID = 0;
 
 	int waypointCount = 0;
+
 	// patrol map2
 	sf::Vector2f firstPosition{ 7 * 40, 3 * 40 };
 	sf::Vector2f secondPosition{ 12 * 40, 3 * 40 };
 	sf::Vector2f thridPosition{ 12 * 40, 6 * 40 };
 	sf::Vector2f fourthPosition{ 5 * 40, 4 * 40 };
+
+	// patrol map4
+	//sf::Vector2f firstPosition{ 6 * 40, 5 * 40 };
+	//sf::Vector2f secondPosition{ 12 * 40, 5 * 40 };
+	//sf::Vector2f thridPosition{ 14 * 40, 2 * 40 };
+	//sf::Vector2f fourthPosition{ 10 * 40, 2 * 40 };
 
 	//debug
 	State lastState = SEARCH;
@@ -43,6 +50,4 @@ public:
 	void patrol(Vector2f ePos, float deltaTime, sf::Vector2f& firstPoint, sf::Vector2f& secondPoint, sf::Vector2f& thirdPoint, sf::Vector2f& fourthPoint, Grid& grid) override;
 
 	void search(Vector2f lastPlayerPosition, float deltaTime, Grid& grid, Entity& player);
-
-	void draw(sf::RenderWindow& window);
 };

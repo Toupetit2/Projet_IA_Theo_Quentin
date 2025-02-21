@@ -2,23 +2,27 @@
 
 EnemyBehaviour::EnemyBehaviour(std::string n, float x, float y, float circleDetect, float circleRange, sf::Vector2i start, int hp) : Enemy(x, y, hp) {
     shape.setPosition(x, y);
-    //CircleDetect.setRadius(circleDetect);
-    //CircleDetect.setPosition(x, y);
-    //CircleDetect.setOrigin(180, 170);
-    //CircleDetect.setFillColor(sf::Color(0, 255, 0, 50));
-    //CircleRange.setRadius(circleRange);
-    //CircleRange.setPosition(x, y);
-    //CircleRange.setOrigin(30, 30);
-    //CircleRange.setFillColor(sf::Color(0, 0, 255, 50));
+
+    CircleDetect.setRadius(circleDetect);
+    CircleDetect.setPosition(x, y);
+    CircleDetect.setOrigin(180, 170);
+    CircleDetect.setFillColor(sf::Color(0, 255, 0, 50));
+    CircleRange.setRadius(circleRange);
+    CircleRange.setPosition(x, y);
+    CircleRange.setOrigin(30, 30);
+    CircleRange.setFillColor(sf::Color(0, 0, 255, 50));
+
     blackboard.SetValue("PlayerDetected", 0);
     blackboard.SetValue("PlayerInRange", 0); // ajout de nouvelles valeurs qui vont servir pour les conditions
     blackboard.SetValue("PlayerLost", 0);
+
     //CirclePoint.setRadius(20.f);
     //CirclePoint.setFillColor(sf::Color::Magenta);
+
     currentState = PATROL;
-    shape.setFillColor(sf::Color::Red);
+    shape.setFillColor(sf::Color(150, 0, 0));
     shape.setOutlineThickness(3.f);
-    shape.setOutlineColor(sf::Color::Green);
+    shape.setOutlineColor(sf::Color::Blue);
 }
 
 bool EnemyBehaviour::detectPlayer(Entity& player) {
@@ -50,7 +54,6 @@ void EnemyBehaviour::playerLost()
 {
     blackboard.SetValue("PlayerLost", 1);
     currentState = SEARCH;
-    //shape.setFillColor(sf::Color::Green);
 }
 
 //void EnemyBehaviour::collisionWall(float deltaTime, Grid& grid, Vector2f direction)
@@ -122,7 +125,7 @@ void EnemyBehaviour::patrol(Vector2f ePos, float deltaTime, sf::Vector2f& firstP
         float angle = std::atan2(direction.y, direction.x); // Angle en radians
         shape.setPosition(shape.getPosition().x + (std::cos(angle) * SPEED * deltaTime), shape.getPosition().y + std::sin(angle) * SPEED * deltaTime);
     }
-    CirclePoint.setPosition(waypoints[waypointCount]);
+    //CirclePoint.setPosition(waypoints[waypointCount]);
 }
 
 void EnemyBehaviour::search(float deltaTime, Grid& grid, Entity& player)
@@ -230,9 +233,8 @@ void EnemyBehaviour::update(float deltaTime, Grid& grid, Entity& player)
         if (detectPlayer(player)) {
             playerDetected(player);
         }
-        else {
-            //shape.setFillColor(sf::Color::Blue);
-        }
+        shape.setOutlineColor(sf::Color::Blue);
+        
         patrol(shape.getPosition(), deltaTime, firstPosition, secondPosition, thridPosition, fourthPosition, grid);
         break;
     
@@ -247,7 +249,7 @@ void EnemyBehaviour::update(float deltaTime, Grid& grid, Entity& player)
             playerLost();
         }
         chase(player.shape.getPosition(), deltaTime, grid);
-        //shape.setFillColor(sf::Color::Red);
+        shape.setOutlineColor(sf::Color::Red);
         playerInRange(player);
         break;
 
@@ -260,15 +262,14 @@ void EnemyBehaviour::update(float deltaTime, Grid& grid, Entity& player)
         if (!detectPlayer(player))
         {
             lastPlayerPosition = player.shape.getPosition();
-            //currentState = SEARCH;
         }
-        //shape.setFillColor(sf::Color::Green);
+        shape.setOutlineColor(sf::Color::Green);
         search(deltaTime, grid, player);
         break;
     }
 
-    //CircleDetect.setPosition(shape.getPosition());
-    //CircleRange.setPosition(shape.getPosition());
+    CircleDetect.setPosition(shape.getPosition());
+    CircleRange.setPosition(shape.getPosition());
 }
 
 void EnemyBehaviour::draw(sf::RenderWindow& window)

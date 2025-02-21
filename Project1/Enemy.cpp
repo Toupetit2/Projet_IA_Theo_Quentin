@@ -1,7 +1,7 @@
 #include "Enemy.hpp"
 #include <cmath>
 
-Enemy::Enemy(float x, float y, int hp) : Entity(x, y, sf::Color::Red, hp) {}
+Enemy::Enemy(float x, float y, int hp) : Entity(x, y, sf::Color(255, 75, 200), hp) {}
 
 void Enemy::update(float deltaTime, Grid& grid, Entity& player) {}
 

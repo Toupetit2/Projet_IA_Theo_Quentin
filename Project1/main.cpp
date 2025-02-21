@@ -23,7 +23,7 @@ int main() {
     cout << "FSM made by Theo (Yellow enemy), Behaviour made by Quentin (Green enemy)" << endl << endl;
     Player player(600, 200, 100); // x, y, hp
     std::vector<shared_ptr<Enemy>> vectorEnemy;
-    shared_ptr<EnemyFSM> enemy1 = make_shared<EnemyFSM>(EnemyFSM(7 * 40, 100, 50)); // x, y, hp
+    shared_ptr<EnemyFSM> enemy1 = make_shared<EnemyFSM>(EnemyFSM(2 * 40, 2 * 40, 50)); // x, y, hp
     vectorEnemy.push_back(enemy1);
     //enemy1 = make_shared<EnemyFSM>(EnemyFSM(700, 100));
     //vectorEnemy.push_back(enemy1);
@@ -32,7 +32,7 @@ int main() {
     vectorEnemyBehaviour.push_back(enemy_B1);
     
     Grid grid;
-    grid.loadFromFile("map2.txt");
+    grid.loadFromFile("map2.txt"); // map4 pour l'autre map
 
     sf::Clock clock;
 

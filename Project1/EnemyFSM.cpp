@@ -3,7 +3,7 @@
 #include "time.h"
 
 EnemyFSM::EnemyFSM(float x, float y, int hp) : Enemy(x, y, hp) {
-    shape.setOutlineColor(Color::Yellow);
+    shape.setOutlineColor(Color::Blue);
     shape.setOutlineThickness(3.f);
 }
 
@@ -34,29 +34,29 @@ void EnemyFSM::update(float deltaTime, Grid& grid, Entity& player)
         break;
     }
     
-    /*if (lastState != currentState)
+    if (lastState != currentState)
     {
         lastState = currentState;
         if (lastState == PATROL)
         {
             cout << "PATROL" << endl;
-            shape.setFillColor(Color::Blue);
+            shape.setOutlineColor(Color::Blue);
         }
         else if (lastState == CHASE)
         {
             cout << "CHASE" << endl;
-            shape.setFillColor(Color::Red);
+            shape.setOutlineColor(Color::Red);
         }
         else if (lastState == SEARCH)
         {
             cout << "SEARCH" << endl;
-            shape.setFillColor(Color::Green);
+            shape.setOutlineColor(Color::Green);
         }
         else 
         {
             cout << "ERROR - UNKNOWN STATE" << endl;
         }
-    }*/
+    }
 }
 
 bool EnemyFSM::detectPlayer(Vector2f pPos)
@@ -155,8 +155,8 @@ void EnemyFSM::patrol(Vector2f ePos, float deltaTime, sf::Vector2f& firstPoint, 
     Pathfinding pathfinding;
     vector<Vector2i> path = pathfinding.findPath(grid, Vector2i(shape.getPosition().x / 40, shape.getPosition().y / 40), Vector2i(waypoints[waypointCount].x / 40, waypoints[waypointCount].y / 40));
 
-    if ((shape.getPosition().x) / 40 < (waypoints[waypointCount].x + 40) / 40 && (shape.getPosition().x) / 40 > (waypoints[waypointCount].x - 40) / 40
-        && (shape.getPosition().y) / 40 < (waypoints[waypointCount].y + 40) / 40 && (shape.getPosition().y) / 40 > (waypoints[waypointCount].y - 40) / 40) {
+    if ((shape.getPosition().x) / 40 < (waypoints[waypointCount].x + 50) / 40 && (shape.getPosition().x) / 40 > (waypoints[waypointCount].x - 50) / 40
+        && (shape.getPosition().y) / 40 < (waypoints[waypointCount].y + 50) / 40 && (shape.getPosition().y) / 40 > (waypoints[waypointCount].y - 50) / 40) {
         waypointCount += 1;
         if (waypointCount > 3) {
             waypointCount = 0;
@@ -170,4 +170,3 @@ void EnemyFSM::patrol(Vector2f ePos, float deltaTime, sf::Vector2f& firstPoint, 
         shape.setPosition(shape.getPosition().x + (std::cos(angle) * SPEED * deltaTime), shape.getPosition().y + std::sin(angle) * SPEED * deltaTime);
     }
 }
-
